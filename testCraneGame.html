@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pachinko Ball Drop Game</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <style>
+    body { margin:0; display:flex; flex-direction:column; align-items:center; }
+    canvas { display:block; }
+    #controls { margin-top:10px; }
+    button { padding:10px 20px; }
+  </style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="controls">
+  <button id="drop">Drop Ball</button>
+</div>
+<script>
+const { Engine, Render, Runner, World, Bodies, Composite, Events } = Matter;
+
+const engine = Engine.create();
+const world = engine.world;
+world.gravity.y = 1;
+
+// Corrected play area: 720 wide x 900 tall
+const width = 720;
+const height = 900;
+
+const render = Render.create({
+  canvas: document.getElementById("game"),
+  engine: engine,
+  options: { width, height, wireframes: false }
+});
+
+Render.run(render);
+Runner.run(Runner.create(), engine);
+
+// Ground
+World.add(world, Bodies.rectangle(width/2, height-20, width, 40, { isStatic: true }));
+
+// Side walls
+World.add(world, [
+  Bodies.rectangle(0, height/2, 40, height, { isStatic: true }),
+  Bodies.rectangle(width, height/2, 40, height, { isStatic: true })
+]);
+
+// Pegs (staggered grid, 7 per row, 8 rows total, peg size increased by 50%)
+for (let row = 0; row < 8; row++) {
+  for (let col = 0; col < 7; col++) {
+    const x = 100 + col * 80 + (row % 2) * 40; // staggered
+    const y = 150 + row * 80; // adjusted spacing for 900 height
+    const peg = Bodies.circle(x, y, 4.5, { isStatic: true, render:{fillStyle:'gray'} });
+    World.add(world, peg);
+  }
+}
+
+// Bottom slots (6 bins with different colors)
+const slotWidth = width / 6;
+const slotColors = ["red","blue","green","yellow","purple","orange"];
+
+for (let i = 0; i < 6; i++) {
+  const x = slotWidth/2 + i * slotWidth;
+  const slot = Bodies.rectangle(x, height-40, slotWidth-10, 20, {
+    isStatic: true,
+    render:{fillStyle:slotColors[i]}
+  });
+  World.add(world, slot);
+}
+
+// Vertical dividers between slots (simple black, 100px tall)
+for (let i = 1; i < 6; i++) {
+  const x = i * slotWidth;
+  const divider = Bodies.rectangle(x, height-60, 10, 100, { isStatic: true, render:{fillStyle:'black'} });
+  World.add(world, divider);
+}
+
+// Draw labels using canvas context (not physics bodies)
+Events.on(render, 'afterRender', () => {
+  const ctx = render.context;
+  ctx.font = "20px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  for (let i = 0; i < 6; i++) {
+    const x = slotWidth/2 + i * slotWidth;
+    ctx.fillStyle = slotColors[i];
+    ctx.fillText(slotColors[i].toUpperCase(), x, height-80);
+  }
+});
+
+// Button to spawn ball (remove old balls first)
+document.getElementById("drop").onclick = () => {
+  // remove all dynamic balls before spawning a new one
+  Composite.allBodies(world).forEach(body => {
+    if (!body.isStatic && body.circleRadius) {
+      World.remove(world, body);
+    }
+  });
+
+  const offset = (Math.random() - 0.5) * 250; // variance tuned for 720 width
+  const ball = Bodies.circle(width/2 + offset, 50, 20, {
+    restitution: 0.6,
+    render:{fillStyle:'red'}
+  });
+  World.add(world, ball);
+};
+</script>
+</body>
+</html>
