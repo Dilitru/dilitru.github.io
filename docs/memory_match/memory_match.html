@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEURO VOLT - MEMORY MATCH</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="app"></div>
+
+  <!-- Name Input Overlay (no logo, clean) -->
+  <div id="name-overlay" class="overlay" style="display:none; z-index:70;"></div>
+
+  <!-- Won Overlay -->
+  <div id="won-overlay" class="overlay" style="display:none;"></div>
+
+  <!-- Lost Overlay -->
+  <div id="lost-overlay" class="overlay" style="display:none;"></div>
+
+  <!-- Leaderboard - Own Overlay, Only via Show Leaderboard Button -->
+  <div id="leaderboard-overlay" class="overlay" style="display:none; z-index:60;">
+    <div class="modal">
+      <h2 style="font-size:14px; letter-spacing:0.2em; font-weight:800;">🏆 LEADERBOARD</h2>
+      <div id="leaderboard-list" style="margin-top:16px; text-align:left;"></div>
+      <button class="btn-primary" style="margin-top:16px;"
+        onclick="document.getElementById('leaderboard-overlay').style.display='none'; play('click')">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

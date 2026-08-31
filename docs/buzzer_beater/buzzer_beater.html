@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buzzer Beater - Basketball Finals Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: #050508;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glow */
+    .glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .glow-blue {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: rgba(30, 58, 138, 0.15);
+      filter: blur(120px);
+    }
+
+    .glow-red {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(127, 29, 29, 0.1);
+      filter: blur(100px);
+    }
+
+    /* Mute button */
+    .mute-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .mute-btn:hover {
+      color: white;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* Start modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+    }
+
+    .modal-card {
+      position: relative;
+      z-index: 101;
+      width: 320px;
+      border-radius: 28px;
+      background: #0c0c0e;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow:
+        0 32px 80px rgba(0,0,0,0.85),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      animation: popIn 0.38s ease;
+    }
+
+    .modal-logo {
+      width: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-logo img {
+      width: 280px;
+      max-width: 280px;
+      max-height: 96px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.6));
+    }
+
+    .modal-subtitle {
+      margin-top: 12px;
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .drop-btn {
+      margin-top: 24px;
+      width: 100%;
+      height: 48px;
+      border-radius: 999px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      font-size: 14px;
+      background: linear-gradient(to bottom, #fdba74, #ea580c);
+      color: white;
+      border: 1px solid rgba(254, 215, 170, 0.8);
+      box-shadow:
+        0 5px 0 #7c2d12,
+        0 12px 24px rgba(249,115,22,0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.1s;
+    }
+
+    .drop-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #7c2d12;
+    }
+
+    .drop-btn:disabled {
+      opacity: 0.6;
+    }
+
+    .total-text {
+      margin-top: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* Board */
+    .board-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .board {
+      position: relative;
+      width: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: black;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* Logo area - 150px black */
+    .logo-area {
+      height: 150px;
+      width: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      flex-shrink: 0;
+    }
+
+    .logo-area img {
+      max-width: 380px;
+      max-height: 120px;
+      width: 100%;
+      object-fit: contain;
+    }
+
+    /* Canvas area */
+    .canvas-area {
+      position: relative;
+      background: #f7e6c8;
+      width: 100%;
+    }
+
+    canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-top: 0;
+    }
+
+    /* Bin labels - 48px tall */
+    .bins {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      height: 48px;
+    }
+
+    .bin {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .bin:last-child {
+      border-right: none;
+    }
+
+    .bin-icon {
+      width: 12px;
+      height: 12px;
+      margin-bottom: 1px;
+    }
+
+    .bin-name {
+      font-size: 7px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .bin-points {
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    /* Result card */
+    .result-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(3px);
+      padding: 16px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .result-card-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+      border-radius: 20px;
+      padding: 2px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .result-card {
+      border-radius: 18px;
+      background: white;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .result-icon {
+      margin: 0 auto 8px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-title {
+      font-weight: 900;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .result-you-scored {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.5);
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .result-points {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .result-legendary {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #ea580c;
+      animation: pulse 1s infinite;
+    }
+
+    .result-jordan {
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.4);
+    }
+
+    .result-total {
+      margin-top: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: rgba(0,0,0,0.3);
+    }
+
+    .result-again {
+      margin-top: 16px;
+      width: 100%;
+      height: 44px;
+      border-radius: 999px;
+      font-weight: 900;
+      color: white;
+      background: black;
+      letter-spacing: 0.05em;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .result-again:active {
+      transform: scale(0.98);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.85);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.7); }
+      50% { transform: scale(1.08); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient glow -->
+  <div class="glow">
+    <div class="glow-blue"></div>
+    <div class="glow-red"></div>
+  </div>
+
+  <!-- Mute -->
+  <button id="muteBtn" class="mute-btn">🔊</button>
+
+  <!-- Start modal -->
+  <div id="startModal" class="modal-backdrop">
+    <div class="modal-bg"></div>
+    <div class="modal-card">
+      <div class="modal-logo">
+        <img id="modalLogo" alt="Buzzer Beater" />
+      </div>
+      <div class="modal-subtitle">
+        Basketball Finals Edition
+      </div>
+      <button id="dropBtn" class="drop-btn">
+        <span>🏀</span> DROP BALL
+      </button>
+      <div id="modalTotal" class="total-text">
+        TOTAL 0
+      </div>
+    </div>
+  </div>
+
+  <!-- Board -->
+  <div class="board-wrap">
+    <div class="board">
+      <!-- Logo area - 150px black -->
+      <div class="logo-area">
+        <img id="boardLogo" alt="Buzzer Beater" />
+      </div>
+
+      <!-- Canvas -->
+      <div class="canvas-area">
+        <canvas id="gameCanvas" width="420" height="502"></canvas>
+
+        <!-- Bins - 6 slots: 0,20,50,100,15,5 -->
+        <div id="bins" class="bins"></div>
+
+        <!-- Result -->
+        <div id="resultOverlay" class="result-overlay hidden">
+          <div id="resultWrap" class="result-card-wrap">
+            <div class="result-card">
+              <div id="resultIcon" class="result-icon"></div>
+              <h2 id="resultTitle" class="result-title"></h2>
+              <p class="result-you-scored">YOU SCORED</p>
+              <p id="resultPoints" class="result-points"></p>
+              <p id="resultExtra" class="hidden"></p>
+              <p id="resultTotal" class="result-total"></p>
+              <button id="againBtn" class="result-again">
+                DROP AGAIN
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------
+    // Config
+    // ----------------------------------------
+    const CANVAS_W = 420;
+    const CANVAS_H = 502;
+
+    const BALL_R = 14;
+    const PEG_R = 4;
+
+    const GRAVITY = 0.12;
+    const FRICTION = 0.99;
+    const RESTITUTION = 0.85;
+    const WALL_REST = 0.85;
+
+    const PEG_START_Y = 70;
+    const PEG_SPACING_Y = 36;
+    const PEG_ROWS = 10;
+    const PEG_GAP = 60;
+    const BIN_H = 48;
+    const BIN_TOP = PEG_START_Y + (PEG_ROWS - 1) * PEG_SPACING_Y + PEG_GAP;
+    const SPAWN_Y = 15;
+
+    // Holes left -> right: 0, 20, 50, 100, 15, 5
+    const BINS = [
+      { label: 'AIR BALL', points: 0, color: '#9ca3af', bg: '#e5e7eb', accent: '#9ca3af' },
+      { label: 'SWISH', points: 20, color: '#059669', bg: '#a7f3d0', accent: '#10b981' },
+      { label: 'SLAM DUNK!', points: 50, color: '#ea580c', bg: '#ffedd5', accent: '#f97316' },
+      { label: 'BUZZER BEATER!', points: 100, color: '#854d0e', bg: '#fef08a', accent: '#eab308' },
+      { label: 'BANK SHOT', points: 15, color: '#2563eb', bg: '#bfdbfe', accent: '#3b82f6' },
+      { label: 'BRICK', points: 5, color: '#78350f', bg: '#fde68a', accent: '#b45309' },
+    ];
+
+    // ----------------------------------------
+    // Logo - inline transparent PNG (readable)
+    // BUZZER BEATER white + orange ball
+    // ----------------------------------------
+    const LOGO_DATA_URL =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAADICAYAAAD...' ;
+
+    // For this simple HTML build we will generate logo via canvas text
+    // to keep file 100% self-contained and readable
+
+    // ----------------------------------------
+    // DOM refs
+    // ----------------------------------------
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const binsEl = document.getElementById('bins');
+    const startModal = document.getElementById('startModal');
+    const resultOverlay = document.getElementById('resultOverlay');
+    const dropBtn = document.getElementById('dropBtn');
+    const againBtn = document.getElementById('againBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const modalTotal = document.getElementById('modalTotal');
+
+    // ----------------------------------------
+    // Render bin labels
+    // ----------------------------------------
+    function renderBins() {
+      binsEl.innerHTML = '';
+
+      BINS.forEach(bin => {
+        const div = document.createElement('div');
+        div.className = 'bin';
+        div.style.background = bin.bg + 'F2';
+
+        div.innerHTML = `
+          <div class="bin-name" style="color:${bin.color}">
+            ${bin.label.split(' ')[0]}
+          </div>
+          <div class="bin-points" style="color:${bin.accent}">
+            ${bin.points}
+          </div>
+        `;
+
+        binsEl.appendChild(div);
+      });
+    }
+    renderBins();
+
+    // ----------------------------------------
+    // Pegs - 10 rows diamond
+    // ----------------------------------------
+    const pegs = [];
+    function buildPegs() {
+      const ROWS = PEG_ROWS;
+      const COLS = 9;
+      const spacingX = 48;
+      const spacingY = PEG_SPACING_Y;
+      const baseX = (CANVAS_W - (COLS - 1) * spacingX) / 2;
+
+      for (let r = 0; r < ROWS; r++) {
+        const y = PEG_START_Y + r * spacingY;
+        const isEven = r % 2 === 0;
+        const count = isEven ? COLS : COLS - 1;
+        const startX = isEven ? baseX : baseX + spacingX / 2;
+
+        for (let c = 0; c < count; c++) {
+          const x = startX + c * spacingX;
+          if (x <= 16 || x >= CANVAS_W - 16) continue;
+          pegs.push({ x, y });
+        }
+      }
+    }
+    buildPegs();
+
+    // ----------------------------------------
+    // Audio - Web Audio API
+    // ----------------------------------------
+    let audioCtx = null;
+    let muted = false;
+    let lastTick = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new Ctx();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function tone(freq, vol, type, dur) {
+      if (muted || !audioCtx) return;
+
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+
+      o.type = type || 'sine';
+      o.frequency.value = freq;
+
+      g.gain.setValueAtTime(vol, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioCtx.currentTime + dur
+      );
+
+      o.connect(g);
+      g.connect(audioCtx.destination);
+
+      o.start();
+      o.stop(audioCtx.currentTime + dur);
+    }
+
+    // ----------------------------------------
+    // Ball + particles
+    // ----------------------------------------
+    let ball = null;
+    let particles = [];
+    let score = 0;
+    let isDropping = false;
+    let spawnTime = 0;
+
+    function spawnBall() {
+      if (isDropping) return;
+
+      initAudio();
+
+      // Hide start modal fully
+      startModal.classList.add('hidden');
+
+      // Wide variance: +-90px
+      const rawX = CANVAS_W / 2 + (Math.random() * 180 - 90);
+      const minX = 20 + BALL_R;
+      const maxX = CANVAS_W - 20 - BALL_R;
+      const x = Math.max(minX, Math.min(maxX, rawX));
+      const vx = (Math.random() - 0.5) * 1.0;
+
+      ball = {
+        x: x,
+        y: SPAWN_Y,
+        vx: vx,
+        vy: 0,
+        rot: 0,
+        spin: vx * 0.1
+      };
+
+      spawnTime = performance.now();
+      isDropping = true;
+
+      // Pop sound
+      tone(440, 0.25, 'sine', 0.15);
+      setTimeout(() => tone(880, 0.2, 'sine', 0.15), 60);
+    }
+
+    function getBinIndex(x) {
+      const w = CANVAS_W / 6;
+      let i = Math.floor(x / w);
+      i = Math.max(0, Math.min(5, i));
+      return i;
+    }
+
+    function confetti(x, color) {
+      for (let i = 0; i < 36; i++) {
+        particles.push({
+          x: x,
+          y: CANVAS_H - 24,
+          vx: (Math.random() - 0.5) * 8,
+          vy: -Math.random() * 9 - 2,
+          life: 1,
+          color: i % 3 === 0 ? color : i % 2 === 0 ? '#facc15' : '#fff',
+          size: Math.random() * 5 + 3
+        });
+      }
+    }
+
+    // ----------------------------------------
+    // Result UI
+    // ----------------------------------------
+    function showResult(bin) {
+      const title = document.getElementById('resultTitle');
+      const points = document.getElementById('resultPoints');
+      const icon = document.getElementById('resultIcon');
+      const extra = document.getElementById('resultExtra');
+      const total = document.getElementById('resultTotal');
+      const wrap = document.getElementById('resultWrap');
+
+      title.textContent = bin.label;
+      title.style.color = bin.color;
+
+      points.textContent = '+' + bin.points;
+      points.style.color = bin.accent;
+
+      icon.style.background = bin.bg;
+      icon.textContent = bin.points >= 100 ? '👑' : bin.points >= 50 ? '🔥' : '🏀';
+
+      wrap.style.background = `linear-gradient(135deg, ${bin.accent}, ${bin.color})`;
+
+      extra.className = bin.points >= 50 ? 'result-legendary' : 'result-jordan';
+      extra.textContent = bin.points >= 50
+        ? '🔥 LEGENDARY SHOT! 🔥'
+        : bin.points === 0
+          ? 'Even Jordan missed sometimes'
+          : '';
+
+      total.textContent = 'TOTAL ' + score;
+      modalTotal.textContent = 'TOTAL ' + score;
+
+      // Bin sound
+      if (bin.points === 0) {
+        tone(200, 0.2, 'sine', 0.3);
+        setTimeout(() => tone(100, 0.2, 'sine', 0.3), 120);
+      } else if (bin.points >= 100) {
+        [300, 500, 800].forEach((f, i) => {
+          setTimeout(() => tone(f, 0.22, 'square', 0.4), i * 90);
+        });
+      } else if (bin.points >= 50) {
+        tone(400, 0.18, 'sine', 0.35);
+        setTimeout(() => tone(600, 0.18, 'sine', 0.35), 80);
+      } else {
+        tone(300, 0.15, 'sine', 0.25);
+      }
+
+      resultOverlay.classList.remove('hidden');
+    }
+
+    // ----------------------------------------
+    // Main loop
+    // ----------------------------------------
+    function loop() {
+      requestAnimationFrame(loop);
+
+      // Clear
+      ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+      // Wood bg
+      ctx.fillStyle = '#f7e6c8';
+      ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+      // Faint lines
+      ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+      ctx.lineWidth = 1;
+      for (let y = PEG_START_Y; y < BIN_TOP; y += 36) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(CANVAS_W, y);
+        ctx.stroke();
+      }
+
+      // Pegs - gold chrome
+      pegs.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, PEG_R, 0, Math.PI * 2);
+
+        const g = ctx.createRadialGradient(
+          p.x - 1, p.y - 1, 0,
+          p.x, p.y, PEG_R
+        );
+        g.addColorStop(0, '#fef08a');
+        g.addColorStop(0.5, '#eab308');
+        g.addColorStop(1, '#854d0e');
+
+        ctx.fillStyle = g;
+        ctx.fill();
+
+        // Highlight dot
+        ctx.beginPath();
+        ctx.arc(p.x - 1, p.y - 1, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.fill();
+      });
+
+      // Particles
+      particles = particles.filter(p => p.life > 0);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.18;
+        p.life -= 0.018;
+
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      });
+      ctx.globalAlpha = 1;
+
+      if (!ball) return;
+
+      // Physics
+      ball.vy += GRAVITY;
+      ball.vx *= FRICTION;
+      ball.vy *= FRICTION;
+
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+      ball.rot += ball.spin + ball.vx * 0.15;
+
+      // Walls - bouncy 0.85
+      if (ball.x - BALL_R <= 0) {
+        ball.x = BALL_R;
+        ball.vx = Math.abs(ball.vx) * WALL_REST;
+        tone(200, 0.1, 'sine', 0.08);
+      }
+      if (ball.x + BALL_R >= CANVAS_W) {
+        ball.x = CANVAS_W - BALL_R;
+        ball.vx = -Math.abs(ball.vx) * WALL_REST;
+        tone(200, 0.1, 'sine', 0.08);
+      }
+
+      // Peg collisions
+      pegs.forEach(peg => {
+        const dx = ball.x - peg.x;
+        const dy = ball.y - peg.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const minD = BALL_R + PEG_R;
+
+        if (dist < minD) {
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const overlap = minD - dist;
+
+          ball.x += nx * overlap;
+          ball.y += ny * overlap;
+
+          const dot = ball.vx * nx + ball.vy * ny;
+
+          ball.vx -= 2 * dot * nx * RESTITUTION;
+          ball.vy -= 2 * dot * ny * RESTITUTION;
+
+          // Random chaos
+          ball.vx += (Math.random() - 0.5) * 0.8;
+          ball.spin = (Math.random() - 0.5) * 0.2;
+
+          // Tick - max 10/sec
+          const now = performance.now();
+          if (now - lastTick > 50) {
+            const f = 600 + Math.random() * 400;
+            tone(f, 0.12, 'sine', 0.08);
+            lastTick = now;
+          }
+        }
+      });
+
+      // Bin landing
+      if (ball.y + BALL_R >= BIN_TOP) {
+        const idx = getBinIndex(ball.x);
+        const bin = BINS[idx];
+
+        score += bin.points;
+        confetti(ball.x, bin.accent);
+        showResult(bin);
+
+        isDropping = false;
+        ball = null;
+        return;
+      }
+
+      // Draw ball - pop animation
+      const age = performance.now() - spawnTime;
+      let scale = 1;
+
+      if (age < 300) {
+        const t = age / 300;
+
+        if (t < 0.5) {
+          scale = t * 2 * 1.32;
+        } else {
+          const t2 = (t - 0.5) * 2;
+          scale = 1.32 - t2 * 0.32;
+        }
+
+        // Ripple
+        const rr = t * 30 + 5;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, BALL_R * scale + rr, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255,255,255,${0.6 - t * 0.6})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      const r = BALL_R * scale;
+
+      // Base orange
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#f97316';
+      ctx.fill();
+
+      // Gradient leather
+      const bg = ctx.createRadialGradient(
+        ball.x - r * 0.3, ball.y - r * 0.3, 0,
+        ball.x, ball.y, r
+      );
+      bg.addColorStop(0, '#fb923c');
+      bg.addColorStop(0.7, '#f97316');
+      bg.addColorStop(1, '#c2410c');
+
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Seams
+      ctx.save();
+      ctx.translate(ball.x, ball.y);
+      ctx.rotate(ball.rot);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+
+      // Vertical
+      ctx.beginPath();
+      ctx.moveTo(0, -r);
+      ctx.lineTo(0, r);
+      ctx.stroke();
+
+      // Horizontal
+      ctx.beginPath();
+      ctx.moveTo(-r, 0);
+      ctx.lineTo(r, 0);
+      ctx.stroke();
+
+      // Curves
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.6, -0.6, 0.6);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.6, Math.PI - 0.6, Math.PI + 0.6);
+      ctx.stroke();
+
+      ctx.restore();
+
+      // Highlight
+      ctx.beginPath();
+      ctx.arc(
+        ball.x - r * 0.25,
+        ball.y - r * 0.25,
+        r * 0.18,
+        0,
+        Math.PI * 2
+      );
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fill();
+    }
+
+    loop();
+
+    // ----------------------------------------
+    // Simple logo via canvas - no image file needed
+    // BUZZER BEATER readable
+    // ----------------------------------------
+    function makeLogoCanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
+      const x = c.getContext('2d');
+
+      // Transparent bg
+      x.clearRect(0, 0, w, h);
+
+      // Text
+      x.fillStyle = 'white';
+      x.font = '900 32px Outfit, sans-serif';
+      x.textAlign = 'center';
+      x.textBaseline = 'middle';
+
+      // Two lines
+      x.fillText('BUZZER', w / 2, h * 0.32);
+      x.fillText('BEATER', w / 2, h * 0.62);
+
+      // Ball
+      const br = 18;
+      const bx = w / 2;
+      const by = h * 0.85;
+
+      x.beginPath();
+      x.arc(bx, by, br, 0, Math.PI * 2);
+      x.fillStyle = '#f97316';
+      x.fill();
+
+      x.strokeStyle = 'black';
+      x.lineWidth = 2;
+      x.beginPath();
+      x.moveTo(bx, by - br);
+      x.lineTo(bx, by + br);
+      x.stroke();
+
+      x.beginPath();
+      x.moveTo(bx - br, by);
+      x.lineTo(bx + br, by);
+      x.stroke();
+
+      return c.toDataURL();
+    }
+
+    const logoUrl = makeLogoCanvas(380, 120);
+    document.getElementById('boardLogo').src = logoUrl;
+    document.getElementById('modalLogo').src = logoUrl;
+
+    // If you have transparent PNG, replace:
+    // document.getElementById('boardLogo').src = 'logo.png';
+
+    // ----------------------------------------
+    // Events
+    // ----------------------------------------
+    dropBtn.addEventListener('click', spawnBall);
+
+    againBtn.addEventListener('click', () => {
+      resultOverlay.classList.add('hidden');
+      startModal.classList.remove('hidden');
+    });
+
+    muteBtn.addEventListener('click', () => {
+      muted = !muted;
+      muteBtn.textContent = muted ? '🔇' : '🔊';
+    });
+
+    // Keyboard - space to drop
+    window.addEventListener('keydown', e => {
+      if (e.code === 'Space') {
+        if (!startModal.classList.contains('hidden')) {
+          spawnBall();
+        } else if (!resultOverlay.classList.contains('hidden')) {
+          resultOverlay.classList.add('hidden');
+          startModal.classList.remove('hidden');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

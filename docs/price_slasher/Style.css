@@ -1,0 +1,456 @@
+/* 
+  ShopSmart Price Slasher - Clean CSS
+  ====================================
+  - Page: orange #EE4D2D
+  - Company bar: same orange
+  - Game proper: white
+  - Always light mode
+*/
+
+:root {
+  --orange: #EE4D2D;
+  --orange-dark: #D84026;
+  --white: #ffffff;
+  --red-tag: #FF3B30;
+  --gold-tag: #FFB800;
+  --bomb-bg: #1C1C1E;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--orange) !important;
+  background-color: var(--orange) !important;
+  color-scheme: light only !important;
+  font-family: 'Inter', system-ui, sans-serif;
+  overscroll-behavior: none;
+  min-height: 100vh;
+}
+
+.page {
+  background: var(--orange);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Company Bar - same orange as page */
+.company-bar {
+  width: 100%;
+  height: 120px;
+  background: var(--orange);
+  display: grid;
+  place-items: center;
+}
+
+@media (min-width: 768px) {
+  .company-bar {
+    height: 140px;
+  }
+}
+
+.company-pill {
+  background: var(--white);
+  border-radius: 9999px;
+  padding: 10px 28px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  display: grid;
+  place-items: center;
+}
+
+.company-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .company-logo {
+    height: 80px;
+  }
+}
+
+/* Game wrapper */
+.game-wrap {
+  width: 100%;
+  max-width: 720px;
+  padding: 0 16px 24px 16px;
+  flex: 1;
+}
+
+.game-area {
+  position: relative;
+  background: var(--white) !important;
+  background-color: var(--white) !important;
+  border: 1px solid #E5E7EB;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+  width: 100%;
+  height: 70vh;
+  min-height: 520px;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+/* HUD inside white area */
+.hud {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.hud-left, .hud-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-pill {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  pointer-events: auto;
+}
+
+.score-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--red-tag);
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.hud-label {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.hud-value {
+  font-size: 20px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.best-badge {
+  background: #18181b;
+  color: white;
+  border-radius: 9999px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.best-badge.hidden {
+  display: none;
+}
+
+/* Popups upper right */
+.popup-root {
+  position: absolute;
+  top: 64px;
+  right: 16px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.popup {
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-weight: 900;
+  font-size: 14px;
+  animation: popupIn 0.22s ease-out;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.popup.normal {
+  background: var(--red-tag);
+  color: white;
+}
+
+.popup.fast {
+  background: #18181b;
+  color: white;
+}
+
+.popup.gold {
+  background: var(--gold-tag);
+  color: #18181b;
+}
+
+.popup.bomb {
+  background: #18181b;
+  color: #FF453A;
+}
+
+.popup.out {
+  animation: popupOut 0.25s ease-in forwards;
+}
+
+/* Trail */
+.trail-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.trail-glow {
+  fill: none;
+  stroke: white;
+  stroke-width: 13;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.26;
+  filter: url(#glow);
+}
+
+.trail-core {
+  fill: none;
+  stroke: white;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.92;
+}
+
+/* Tags */
+.game-item {
+  position: absolute;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.tag {
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 900;
+  font-size: 14px;
+  transform: rotate(var(--rot));
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  display: grid;
+  place-items: center;
+  min-width: 72px;
+}
+
+.tag.red {
+  background: var(--red-tag);
+  color: white;
+}
+
+.tag.gold {
+  background: var(--gold-tag);
+  color: #18181b;
+}
+
+.bomb {
+  width: 56px;
+  height: 56px;
+  background: var(--bomb-bg);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Screens */
+.screen {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  z-index: 40;
+  display: grid;
+  place-items: center;
+}
+
+.screen.hidden {
+  display: none;
+}
+
+.screen-center {
+  text-align: center;
+  padding: 24px;
+  max-width: 360px;
+}
+
+.app-logo-box {
+  width: 220px;
+  height: 220px;
+  background: white;
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px auto;
+}
+
+@media (min-width: 768px) {
+  .app-logo-box {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+.app-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.app-logo.small {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 0 auto 16px auto;
+}
+
+.tutorial {
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+
+.tutorial-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.t-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.mini-tag {
+  width: 44px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.mini-tag.red {
+  background: var(--red-tag);
+  color: white;
+}
+
+.mini-tag.gold {
+  background: var(--gold-tag);
+}
+
+.mini-bomb {
+  width: 44px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+.play-btn {
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 16px 48px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(238,77,45,0.35);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.play-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 16px 32px rgba(238,77,45,0.45);
+}
+
+.play-btn:active {
+  transform: scale(0.97);
+}
+
+.end-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+.end-title {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.final-score {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--orange);
+}
+
+.rank-text {
+  font-size: 14px;
+  opacity: 0.6;
+  margin: 12px 0 24px 0;
+}
+
+@keyframes popupIn {
+  0% { transform: translateX(20px) scale(0.85); opacity: 0 }
+  100% { transform: translateX(0) scale(1); opacity: 1 }
+}
+
+@keyframes popupOut {
+  0% { transform: translateX(0) scale(1); opacity: 1 }
+  100% { transform: translateX(18px) scale(0.9); opacity: 0 }
+}
+
+/* Force light mode always white */
+@media (prefers-color-scheme: dark) {
+  html, body, .page, .company-bar {
+    background: var(--orange) !important;
+  }
+  .game-area, .company-pill, .app-logo-box, .end-card {
+    background: white !important;
+  }
+}

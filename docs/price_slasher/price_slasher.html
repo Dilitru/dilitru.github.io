@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
+  <title>ShopSmart - Price Slasher</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 
+    SHOPSMART - Price Slasher
+    ==========================
+    Orange theme: #EE4D2D (Shopee)
+    Game proper: white #FFFFFF
+    Company logo top: horizontal SHOPSMART
+    App logo: PRICE SLASHER (scissors)
+  -->
+
+  <!-- Orange Page Background -->
+  <div class="page">
+
+    <!-- Company Logo Bar - SAME orange as page -->
+    <header class="company-bar">
+      <div class="company-pill">
+        <img 
+          src="shopsmart-logo.jpg" 
+          alt="SHOPSMART"
+          class="company-logo"
+        />
+      </div>
+    </header>
+
+    <!-- White Game Proper -->
+    <main class="game-wrap">
+      <div id="gameArea" class="game-area">
+
+        <!-- HUD INSIDE white area -->
+        <div class="hud">
+          <div class="hud-left">
+            <span class="hud-label">TIME</span>
+            <span id="timeEl" class="hud-value">30s</span>
+          </div>
+          <div class="hud-right">
+            <div id="bestEl" class="best-badge hidden">BEST 0</div>
+            <div class="score-pill">
+              <span class="score-icon">%</span>
+              <span class="hud-label">SCORE</span>
+              <span id="scoreEl" class="hud-value">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Popups upper right -->
+        <div id="popupRoot" class="popup-root"></div>
+
+        <!-- Slash trail SVG -->
+        <svg id="trailSvg" class="trail-svg">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <polyline id="trailGlow" class="trail-glow" />
+          <polyline id="trailCore" class="trail-core" />
+        </svg>
+
+        <!-- START SCREEN -->
+        <div id="startScreen" class="screen">
+          <div class="screen-center">
+            <!-- Big Square App Logo -->
+            <div class="app-logo-box">
+              <img 
+                src="price-slasher-logo.jpg" 
+                alt="Price Slasher"
+                class="app-logo"
+              />
+            </div>
+
+            <!-- Simplified Tutorial -->
+            <p class="tutorial">
+              Slash the red and gold tags, but avoid the bombs.
+            </p>
+
+            <!-- Visual hint icons -->
+            <div class="tutorial-icons">
+              <div class="t-icon">
+                <div class="mini-tag red">-50%</div>
+                <span>slash</span>
+              </div>
+              <div class="t-icon">
+                <div class="mini-tag gold">500</div>
+                <span>slash</span>
+              </div>
+              <div class="t-icon">
+                <div class="mini-bomb">💣</div>
+                <span>avoid</span>
+              </div>
+            </div>
+
+            <button id="playBtn" class="play-btn">PLAY</button>
+          </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="endScreen" class="screen hidden">
+          <div class="screen-center end-card">
+            <img 
+              src="price-slasher-logo.webp" 
+              alt="Price Slasher"
+              class="app-logo small"
+            />
+            <h2 class="end-title">Time's Up!</h2>
+            <div id="finalScore" class="final-score">0</div>
+            <p id="rankText" class="rank-text"></p>
+            <button id="againBtn" class="play-btn">PLAY AGAIN</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

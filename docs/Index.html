@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DILITRU</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+  
+  /* TOPBAR */
+  .topbar{
+    position:sticky;top:0;z-index:100;
+    background:#0FA89A;
+    height:64px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 28px;
+    box-shadow:0 4px 24px rgba(15,168,154,0.35),0 1px 3px rgba(15,168,154,0.2);
+    animation:topbarIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .topbar::after{
+    content:'';position:absolute;left:0;right:0;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);
+  }
+  @keyframes topbarIn{
+    0%{transform:translateY(-100%);opacity:0}
+    60%{transform:translateY(6px);opacity:1}
+    80%{transform:translateY(-3px)}
+    100%{transform:translateY(0);opacity:1}
+  }
+  .logo{
+    font-family:'Orbitron',sans-serif;font-weight:800;letter-spacing:0.12em;
+    color:#fff;font-size:20px;
+    text-shadow:0 0 12px rgba(255,255,255,0.4);
+    animation:logoIn 0.6s 0.2s both cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes logoIn{from{transform:translateX(-16px);opacity:0}to{transform:translateX(0);opacity:1}}
+  .home-btn{
+    width:44px;height:44px;border-radius:50%;background:#fff;border:none;
+    display:grid;place-items:center;cursor:pointer;
+    box-shadow:0 2px 10px rgba(0,0,0,0.12);
+    animation:homeIn 0.6s 0.4s both cubic-bezier(0.34,1.56,0.64,1);
+    transition:transform 0.2s,box-shadow 0.2s;
+  }
+  .home-btn:hover{transform:scale(1.08);box-shadow:0 4px 18px rgba(0,0,0,0.18)}
+  @keyframes homeIn{from{transform:scale(0.6);opacity:0}to{transform:scale(1);opacity:1}}
+  .home-btn svg{width:20px;height:20px;fill:#0FA89A}
+
+  /* GRID */
+  .grid{
+    max-width:1200px;margin:0 auto;padding:32px 28px 80px;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px;
+  }
+  .item{
+    background:#fff;border:1px solid #f0f0f0;border-radius:16px;overflow:hidden;
+    box-shadow:0 2px 12px rgba(0,0,0,0.04);
+    transition:transform 0.3s,box-shadow 0.3s;
+    animation:cardIn 0.6s both cubic-bezier(0.16,1,0.3,1);
+  }
+  .item:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 16px 32px rgba(0,0,0,0.1)}
+  @keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .card-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#f5f5f5}
+  .card-btn{
+    width:100%;border:none;background:#0FA89A;color:#fff;
+    padding:14px 16px;font-weight:700;font-family:'Space Grotesk',sans-serif;
+    font-size:14px;letter-spacing:0.02em;cursor:pointer;
+    transition:filter 0.2s,transform 0.1s;
+  }
+  .card-btn:hover{filter:brightness(1.08)}
+  .card-btn:active{transform:scale(0.98)}
+
+  /* MODAL */
+  .overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(0px);
+    display:none;place-items:center;padding:24px;
+  }
+  .overlay.open{display:grid;animation:overlayIn 0.3s both}
+  @keyframes overlayIn{from{opacity:0;backdrop-filter:blur(0px)}to{opacity:1;backdrop-filter:blur(12px)}}
+  .overlay.closing{animation:overlayOut 0.3s both}
+  @keyframes overlayOut{from{opacity:1;backdrop-filter:blur(12px)}to{opacity:0;backdrop-filter:blur(0px)}}
+
+  .modal{
+    background:#fff;max-width:480px;width:100%;border-radius:24px;padding:24px;
+    box-shadow:0 24px 64px rgba(0,0,0,0.18);
+    transform-origin:center;
+  }
+  .overlay.open .modal{animation:modalEnter 1s cubic-bezier(0.34,1.56,0.64,1) both}
+  .overlay.closing .modal{animation:modalLeave 0.3s ease both}
+  @keyframes modalEnter{
+    0%{opacity:0;transform:scale(0.85) translateY(40px) rotateX(10deg)}
+    40%{opacity:1;transform:scale(1.05) translateY(-8px) rotateX(0deg)}
+    70%{transform:scale(0.98) translateY(4px)}
+    100%{transform:scale(1) translateY(0)}
+  }
+  @keyframes modalLeave{to{opacity:0;transform:scale(0.92) translateY(20px)}}
+
+  .modal-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px;display:block;background:#f5f5f5;position:relative;overflow:hidden}
+  .modal-thumb::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(110deg,transparent 0%,transparent 40%,rgba(255,255,255,0.5) 50%,transparent 60%,transparent 100%);
+    transform:translateX(-100%);animation:shine 1s 0.3s both;
+  }
+  .overlay.open .modal-thumb{animation:thumbIn 0.6s 0.15s both cubic-bezier(0.16,1,0.3,1)}
+  @keyframes thumbIn{from{opacity:0;transform:scale(0.8) rotate(-2deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+  @keyframes shine{to{transform:translateX(100%)}}
+
+  .modal-title{font-size:28px;font-weight:700;margin:18px 0 8px;letter-spacing:-0.02em;color:#111}
+  .overlay.open .modal-title{animation:titleIn 0.5s 0.35s both cubic-bezier(0.16,1,0.3,1)}
+  @keyframes titleIn{from{opacity:0;transform:translateY(20px);letter-spacing:0.2em}to{opacity:1;transform:translateY(0);letter-spacing:-0.02em}}
+
+  .modal-desc{font-size:14px;line-height:1.6;color:#6b7280;margin-bottom:20px}
+  .overlay.open .modal-desc{animation:descIn 0.5s 0.5s both}
+  @keyframes descIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  .view-btn{
+    width:100%;background:#0FA89A;color:#fff;border:none;border-radius:999px;
+    padding:14px;font-weight:700;font-size:14px;letter-spacing:0.06em;cursor:pointer;
+    box-shadow:0 4px 16px rgba(15,168,154,0.3);
+    transition:transform 0.2s,box-shadow 0.2s;
+  }
+  .view-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(15,168,154,0.4)}
+  .overlay.open .view-btn{animation:viewIn 0.6s 0.65s both cubic-bezier(0.34,1.56,0.64,1)}
+  @keyframes viewIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+  @keyframes glowPulse{0%,100%{box-shadow:0 4px 16px rgba(15,168,154,0.3)}50%{box-shadow:0 8px 28px rgba(15,168,154,0.5)}}
+  .overlay.open .view-btn{animation:viewIn 0.6s 0.65s both cubic-bezier(0.34,1.56,0.64,1),glowPulse 2s 1.3s infinite}
+
+  .back-btn{
+    width:100%;margin-top:10px;background:transparent;border:none;color:#0FA89A;
+    font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+    padding:10px;cursor:pointer;opacity:0.8;transition:opacity 0.2s;
+  }
+  .back-btn:hover{opacity:1;text-decoration:underline}
+  .overlay.open .back-btn{animation:backIn 0.4s 0.85s both}
+  @keyframes backIn{from{opacity:0;transform:translateY(8px)}to{opacity:0.8;transform:translateY(0)}}
+
+  .error{grid-column:1/-1;text-align:center;padding:40px;color:#ef4444;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">DILITRU</div>
+  <button class="home-btn" onclick="window.location.href='https://dilitru.github.io'" aria-label="Home">
+    <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-5H11v5H6v-9H3z"/></svg>
+  </button>
+</div>
+
+<div id="grid" class="grid"></div>
+
+<div id="overlay" class="overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <img id="mThumb" class="modal-thumb" src="" alt="">
+    <h2 id="mTitle" class="modal-title"></h2>
+    <p id="mDesc" class="modal-desc"></p>
+    <button id="mView" class="view-btn">VIEW DEMO</button>
+    <button class="back-btn" onclick="closeModal()">BACK</button>
+  </div>
+</div>
+
+<script src="galleryData.js?v=2"></script>
+<script>
+  const grid = document.getElementById('grid');
+  const overlay = document.getElementById('overlay');
+  const mThumb = document.getElementById('mThumb');
+  const mTitle = document.getElementById('mTitle');
+  const mDesc = document.getElementById('mDesc');
+  const mView = document.getElementById('mView');
+
+  function buildGrid(){
+    if(typeof GALLERY_ITEMS === 'undefined'){
+      grid.innerHTML = '<div class="error">galleryData.js not found.<br>Make sure galleryData.js is in SAME folder as index.html<br><br>Check console (F12) for errors.</div>';
+      console.error('GALLERY_ITEMS is undefined - galleryData.js not loaded');
+      return;
+    }
+    grid.innerHTML = '';
+    GALLERY_ITEMS.forEach((item, i)=>{
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.style.animationDelay = (i*0.06)+'s';
+      div.innerHTML = `
+        <img class="card-thumb" src="${item.thumb}" alt="${item.name}" loading="lazy">
+        <button class="card-btn">${item.name}</button>
+      `;
+      div.querySelector('.card-btn').addEventListener('click', ()=> openModal(item));
+      div.querySelector('.card-thumb').addEventListener('click', ()=> openModal(item));
+      grid.appendChild(div);
+    });
+    console.log('Loaded', GALLERY_ITEMS.length, 'items from galleryData.js');
+  }
+
+  function openModal(item){
+    mThumb.src = item.thumb;
+    mTitle.textContent = item.name;
+    mDesc.textContent = item.desc;
+    mView.onclick = ()=> window.open(item.demo, '_blank');
+    overlay.classList.remove('closing');
+    overlay.classList.add('open');
+    // restart animations
+    overlay.querySelector('.modal').style.animation = 'none';
+    void overlay.querySelector('.modal').offsetWidth;
+    overlay.querySelector('.modal').style.animation = '';
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(){
+    overlay.classList.add('closing');
+    setTimeout(()=>{
+      overlay.classList.remove('open','closing');
+      document.body.style.overflow='';
+    },280);
+  }
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+  document.addEventListener('DOMContentLoaded', buildGrid);
+  // if script loaded after DOM, also try immediate
+  if(document.readyState !== 'loading') buildGrid();
+</script>
+</body>
+</html>
