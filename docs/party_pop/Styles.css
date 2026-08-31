@@ -1,0 +1,328 @@
+/* =========================================
+   Bubble Pop Party - Styles
+   Split for readability. No line >100 chars.
+   ========================================= */
+
+:root {
+  --bubble-size: 68px;
+  --company-h: 20vh;
+  --company-min: 110px;
+  --company-max: 180px;
+  --page-bg-1: #ffe8a3;
+  --page-bg-2: #ffd6e0;
+  --page-bg-3: #c7e8ff;
+  --ink: #1a2a44;
+  --blue: #4ca8ff;
+  --gold: #ffd700;
+  --red: #ff4d4d;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: ui-rounded, system-ui, sans-serif;
+  background: radial-gradient(
+    circle at 50% 0%,
+    var(--page-bg-1) 0%,
+    var(--page-bg-2) 45%,
+    var(--page-bg-3) 100%
+  );
+  color: var(--ink);
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+/* Company bar - 20% height, horizontal logo */
+.company-bar {
+  height: var(--company-h);
+  min-height: var(--company-min);
+  max-height: var(--company-max);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  z-index: 50;
+  position: relative;
+}
+
+.company-logo {
+  width: 90%;
+  max-width: 800px;
+  height: auto;
+  max-height: 85%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+}
+
+/* Game root */
+.game-root {
+  position: relative;
+  height: calc(100% - var(--company-h));
+  min-height: calc(100% - var(--company-max));
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Top UI */
+.top-ui {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 14px;
+  gap: 8px;
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.score-box, .timer-box {
+  background: rgba(255,255,255,0.8);
+  border-radius: 14px;
+  padding: 6px 12px;
+  min-width: 72px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  font-weight: 700;
+}
+
+.score, .timer {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.center-tagline {
+  font-size: 12px;
+  line-height: 1.2;
+  max-width: 200px;
+  text-align: center;
+  opacity: 0.8;
+  padding-top: 4px;
+}
+
+/* Bubble area */
+.bubble-area {
+  position: absolute;
+  inset: 0;
+  top: 56px;
+  overflow: hidden;
+}
+
+/* Bubble - fixed 68px, forced white gloss */
+.bubble {
+  position: absolute;
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: none;
+  pointer-events: auto;
+  user-select: none;
+  color-scheme: light;
+  forced-color-adjust: none;
+  isolation: isolate;
+  will-change: transform;
+  transition: transform 0.08s ease;
+}
+
+.bubble:active {
+  transform: scale(0.92);
+}
+
+.bubble.blue {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #7cc4ff 0%,
+    var(--blue) 55%,
+    #2f7fd1 100%
+  );
+  box-shadow:
+    inset -6px -8px 14px rgba(0,0,0,0.18),
+    0 6px 14px rgba(76,168,255,0.35);
+}
+
+.bubble.gold {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffe88a 0%,
+    var(--gold) 55%,
+    #d1a500 100%
+  );
+  box-shadow:
+    inset -6px -8px 14px rgba(0,0,0,0.18),
+    0 6px 14px rgba(255,215,0,0.45);
+}
+
+.bubble.red {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ff8a8a 0%,
+    var(--red) 55%,
+    #c41e1e 100%
+  );
+  box-shadow:
+    inset -6px -8px 14px rgba(0,0,0,0.18),
+    0 6px 14px rgba(255,77,77,0.35);
+}
+
+/* White shine - always white even in dark mode */
+.bubble::before {
+  content: '';
+  position: absolute;
+  left: 12%;
+  top: 12%;
+  width: 38%;
+  height: 38%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #ffffff 0%,
+    rgba(255,255,255,0.9) 22%,
+    rgba(255,255,255,0.0) 60%
+  ) !important;
+  opacity: 0.95 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  pointer-events: none;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  right: 18%;
+  bottom: 22%;
+  width: 14%;
+  height: 14%;
+  border-radius: 50%;
+  background: #ffffff !important;
+  opacity: 0.9 !important;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bubble::before {
+    background: radial-gradient(
+      circle at 30% 30%,
+      #ffffff 0%,
+      rgba(255,255,255,0.85) 25%,
+      transparent 60%
+    ) !important;
+  }
+  .bubble::after {
+    background: #ffffff !important;
+  }
+}
+
+/* Float +score text */
+.float-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.float-text {
+  position: absolute;
+  font-weight: 900;
+  font-size: 20px;
+  transform: translate(-50%, -50%);
+  animation: floatUpFade 900ms ease-out forwards;
+  text-shadow: 0 1px 0 #fff, 0 2px 6px rgba(0,0,0,0.2);
+  will-change: transform, opacity;
+}
+
+.float-text.blue { color: var(--blue); }
+.float-text.gold { color: #b89600; }
+.float-text.red { color: var(--red); }
+
+@keyframes floatUpFade {
+  0% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-70px) scale(1.2); }
+}
+
+@keyframes rise {
+  from { transform: translateY(0); }
+  to { transform: translateY(-110vh); }
+}
+
+/* Overlays - opaque, same bg as page, no sudden blue */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  background: radial-gradient(
+    circle at 50% 0%,
+    var(--page-bg-1) 0%,
+    var(--page-bg-2) 45%,
+    var(--page-bg-3) 100%
+  );
+  /* opaque - no transparency */
+}
+
+.overlay.hidden { display: none; }
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  text-align: center;
+}
+
+.square-logo {
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
+  animation: floatLogo 3s ease-in-out infinite;
+}
+
+.app-logo { width: 220px; height: 220px; object-fit: contain; }
+.end-logo { width: 240px; height: 240px; object-fit: contain; }
+
+@keyframes floatLogo {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.rules-title { font-size: 14px; opacity: 0.7; letter-spacing: 1px; text-transform: uppercase; }
+.rules-list { list-style: none; display: flex; gap: 14px; font-weight: 700; font-size: 14px; }
+.rules-list li { display: flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot.blue { background: var(--blue); }
+.dot.gold { background: var(--gold); }
+.dot.red { background: var(--red); }
+.rules-time { font-size: 12px; opacity: 0.6; }
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 32px;
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  transition: transform 0.12s ease;
+}
+
+.btn:active { transform: scale(0.96); }
+.btn.primary { background: var(--ink); color: white; }
+.btn.secondary { background: white; color: var(--ink); }
+
+.final-label { font-size: 12px; letter-spacing: 1px; opacity: 0.6; text-transform: uppercase; }
+.final-score { font-size: 54px; font-weight: 900; }
