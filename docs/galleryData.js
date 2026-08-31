@@ -19,7 +19,7 @@ const GALLERY_ITEMS = [
     name: "Basketball Pachinko",
     thumb: "thumbs/basketball_pachinko.png",
     desc: "A basketball-themed pachinko.",
-    demo: "https://dilitru.github.io/baskeball_pachinko/basketball_pachinko.html"
+    demo: "https://dilitru.github.io/basketball_pachinko/basketball_pachinko.html"
   },
   {
     name: "Memory Match",
