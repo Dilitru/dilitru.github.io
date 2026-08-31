@@ -11,7 +11,7 @@ const CONFIG = {
   orange: '#EE4D2D',
   totalTime: 30,
 
-  // spawn intervals (ms)
+  // spawn intervals (ms) - already in ms
   normalInterval: 250,
   goldInterval: 2500,
   bombInterval: 2500,
@@ -25,8 +25,8 @@ const CONFIG = {
   scoreBomb: -250,
   fastWindowMs: 500,
 
-  // physics
-  gravity: 0.28,
+  // physics - lowered gravity + higher launch for high arc
+  gravity: 0.18,
   trailMax: 20,
 
   labels: ['-50%', '-70%', '-30%', '% OFF', 'SALE', '-25%', '-80%']
@@ -197,9 +197,9 @@ function spawnItem(type) {
     id: uid(),
     type: type,
     x: rand(size, w - size),
-    y: h + size,
-    vx: rand(-2.5, 2.5),
-    vy: rand(-14, -9),
+    y: h + size + 10,
+    vx: rand(-3.2, 3.2),
+    vy: rand(-19, -14),
     rot: rand(-20, 20),
     rotSpeed: rand(-4, 4),
     size: size,
@@ -219,6 +219,11 @@ function spawnItem(type) {
     const cls = isGold ? 'gold' : 'red';
     el.innerHTML = `<div class="tag ${cls}">${item.label}</div>`;
   }
+
+  // FIX: set initial position immediately to avoid 0,0 flash
+  el.style.left = item.x + 'px';
+  el.style.top = item.y + 'px';
+  el.style.transform = `translate(-50%, -50%) rotate(${item.rot}deg)`;
 
   els.gameArea.appendChild(el);
   item.el = el;
@@ -415,32 +420,55 @@ function onPointerUp() {
 // --------------------
 // GAME FLOW
 // --------------------
+function clearAllTimers() {
+  Object.values(timers).forEach(t => {
+    if (t) {
+      clearInterval(t);
+      clearTimeout(t);
+    }
+  });
+  timers = {
+    gameLoop: null,
+    countdown: null,
+    normalSpawn: null,
+    goldSpawn: null,
+    bombSpawn: null
+  };
+}
+
 function startGame() {
+  // FIX: clear any previous timers first
+  clearAllTimers();
+
   state.game = 'playing';
   state.score = 0;
   state.timeLeft = CONFIG.totalTime;
   state.items = [];
   state.trail = [];
 
-  // clear old dom
+  // clear old dom items
   document
     .querySelectorAll('.game-item')
     .forEach(el => el.remove());
 
   els.score.textContent = '0';
   els.time.textContent = CONFIG.totalTime + 's';
+  els.time.style.color = '';
 
   els.startScreen.classList.add('hidden');
   els.endScreen.classList.add('hidden');
 
-  // initial burst
+  // initial burst - 5 tickets
   for (let i = 0; i < CONFIG.initialBurst; i++) {
-    setTimeout(() => spawnNormal(), i * 120);
+    setTimeout(() => {
+      if (state.game === 'playing') spawnNormal();
+    }, i * 120);
   }
 
-  // loops
+  // physics loop 60fps
   timers.gameLoop = setInterval(gameLoop, 1000 / 60);
 
+  // countdown - pure countdown, no extra reductions
   timers.countdown = setInterval(() => {
     state.timeLeft--;
     els.time.textContent = state.timeLeft + 's';
@@ -456,32 +484,29 @@ function startGame() {
     }
   }, 1000);
 
-  // spawns - pure timing, no timeLeft reduction
-  timers.normalSpawn = setInterval(
-    spawnNormal,
-    CONFIG.normalInterval * 1000
-  );
+  // FIX: spawns now correctly keep spawning
+  timers.normalSpawn = setInterval(() => {
+    if (state.game === 'playing') spawnNormal();
+  }, CONFIG.normalInterval);
 
-  timers.goldSpawn = setInterval(
-    spawnGold,
-    CONFIG.goldInterval * 1000
-  );
+  timers.goldSpawn = setInterval(() => {
+    if (state.game === 'playing') spawnGold();
+  }, CONFIG.goldInterval);
 
-  setTimeout(() => {
-    timers.bombSpawn = setInterval(
-      spawnBomb,
-      CONFIG.bombInterval * 1000
-    );
-  }, CONFIG.bombFirstAt * 1000);
+  timers.bombSpawn = setTimeout(() => {
+    // first bomb after offset, then interval
+    if (state.game === 'playing') spawnBomb();
+    timers.bombSpawn = setInterval(() => {
+      if (state.game === 'playing') spawnBomb();
+    }, CONFIG.bombInterval);
+  }, CONFIG.bombFirstAt);
 }
 
 function endGame() {
   state.game = 'over';
 
   // stop timers
-  Object.values(timers).forEach(t => {
-    if (t) clearInterval(t);
-  });
+  clearAllTimers();
 
   // best
   if (state.score > state.best) {
