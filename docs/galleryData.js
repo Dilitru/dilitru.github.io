@@ -33,7 +33,12 @@ const GALLERY_ITEMS = [
     desc: "A multiplayer bubble popper.",
     demo: "https://dilitru.github.io/party_pop/party_pop.html"
   },
-  
+  {
+    name: "Whack A Mole",
+    thumb: "thumbs/whack_a_mole.png",
+    desc: "A classic whack a mole game.",
+    demo: "https://dilitru.github.io/whack_a_mole/whack_a_mole.html"
+  },
   {
     name: "Coming soon",
     thumb: "thumbnail.png",
