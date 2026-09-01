@@ -195,7 +195,7 @@
     mThumb.src = item.thumb;
     mTitle.textContent = item.name;
     mDesc.textContent = item.desc;
-    mView.onclick = ()=> window.open(item.demo, '_blank');
+    mView.onclick = ()=> window.location.href = item.demo;
     overlay.classList.remove('closing');
     overlay.classList.add('open');
     // restart animations
