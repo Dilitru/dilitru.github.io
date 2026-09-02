@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FLASH Quiz</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #151515;
+      --border: #262626;
+      --neon: #c8ff00;
+      --neon-dim: #a6d400;
+      --white: #ffffff;
+      --muted: #8a8a8a;
+      --correct: #c8ff00;
+      --wrong: #ff3b3b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 12px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* --- Banner --- */
+    .banner {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* --- Screens --- */
+    .screen { padding: 32px 28px 28px; }
+
+    .center {
+      text-align: center;
+      padding: 40px 32px 32px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    /* --- Buttons --- */
+    .btn-primary {
+      width: 100%;
+      background: var(--neon);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-primary:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      background: #2a2a2a;
+      color: var(--muted);
+    }
+
+    /* --- Progress --- */
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: #222;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--neon);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* --- Question --- */
+    .question {
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 600;
+      margin-bottom: 16px;
+      min-height: 48px;
+    }
+
+    /* --- Answers --- */
+    .answers {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .answer-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      background: #1c1c1c;
+      border: 1px solid var(--border);
+      color: var(--white);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.3;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .answer-btn:hover { border-color: #3a3a3a; }
+
+    .answer-label {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 8px;
+      background: #252525;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .answer-btn.selected { border-color: var(--white); }
+
+    .answer-btn.correct {
+      background: #1e2a00;
+      border-color: var(--neon);
+    }
+
+    .answer-btn.correct .answer-label {
+      background: var(--neon);
+      color: #000;
+    }
+
+    .answer-btn.wrong {
+      background: #2a1414;
+      border-color: var(--wrong);
+    }
+
+    /* --- Score pop --- */
+    .score-pop {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #111;
+      color: #fff;
+      border: 1px solid var(--neon);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 18px;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 10;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+
+    .score-pop.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* --- Final --- */
+    .final-score {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin: 12px 0 6px;
+    }
+
+    .final-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .breakdown {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 8px 10px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border: 1px solid #222;
+    }
+
+    .row b { color: var(--neon); }
+  </style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <!-- Banner -->
+  <img
+    id="banner"
+    class="banner"
+    src="/mnt/data/resource/flash_logo_subtitle.webp"
+    alt="Company logo banner 16:9"
+  />
+
+  <!-- Start -->
+  <div id="startScreen" class="center">
+    <p class="subtitle">
+      Answer 5 questions.<br>
+      Choose A, B, C or D.
+    </p>
+    <div style="height:28px"></div>
+    <button id="startBtn" class="btn-primary">
+      Start quiz
+    </button>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quizScreen" class="screen" style="display:none">
+    <div class="progress-row">
+      <span id="qCount">Question 1 / 5</span>
+      <span id="scoreSmall">0 pts</span>
+    </div>
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill"></div>
+    </div>
+
+    <div id="questionText" class="question"></div>
+
+    <div id="answers" class="answers"></div>
+
+    <button id="nextBtn" class="btn-primary" disabled>
+      Next question
+    </button>
+  </div>
+
+  <!-- Final -->
+  <div id="finalScreen" class="center" style="display:none">
+    <div class="final-score" id="finalScore">0</div>
+    <div class="final-sub" id="finalSub"></div>
+    <button id="restartBtn" class="btn-primary">
+      Play again
+    </button>
+    <div id="breakdown" class="breakdown"></div>
+  </div>
+</div>
+
+<div id="scorePop" class="score-pop">+100</div>
+
+<script>
+  // --- Config ---
+  const QUESTIONS = [
+    {
+      q: "What does HTML stand for?",
+      opts: [
+        "Hyper Trainer Marking Language",
+        "Hyper Text Marketing Language",
+        "Hyper Text Markup Language",
+        "Hyper Text Markup Leveler"
+      ],
+      correct: 2
+    },
+    {
+      q: "Which planet is known as the Red Planet?",
+      opts: ["Venus", "Mars", "Jupiter", "Saturn"],
+      correct: 1
+    },
+    {
+      q: "What is the fastest land animal?",
+      opts: ["Cheetah", "Lion", "Gazelle", "Leopard"],
+      correct: 0
+    },
+    {
+      q: "In which year did the Berlin Wall fall?",
+      opts: ["1987", "1988", "1989", "1990"],
+      correct: 2
+    },
+    {
+      q: "Which language runs in a web browser?",
+      opts: ["Java", "C", "Python", "JavaScript"],
+      correct: 3
+    }
+  ];
+
+  // --- State ---
+  let index = 0;
+  let totalScore = 0;
+  let startTime = 0;
+  let answered = false;
+  let history = [];
+
+  // --- Elements ---
+  const startScreen = document.getElementById('startScreen');
+  const quizScreen = document.getElementById('quizScreen');
+  const finalScreen = document.getElementById('finalScreen');
+  const qCount = document.getElementById('qCount');
+  const scoreSmall = document.getElementById('scoreSmall');
+  const progressFill = document.getElementById('progressFill');
+  const questionText = document.getElementById('questionText');
+  const answersEl = document.getElementById('answers');
+  const nextBtn = document.getElementById('nextBtn');
+  const startBtn = document.getElementById('startBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const finalScore = document.getElementById('finalScore');
+  const finalSub = document.getElementById('finalSub');
+  const breakdown = document.getElementById('breakdown');
+  const scorePop = document.getElementById('scorePop');
+
+  // Replace banner src with local file if present
+  // If you uploaded flash_logo_subtitle.webp,
+  // host it and set src here.
+
+  // --- Helpers ---
+  function calcScore(isCorrect, timeSec) {
+    if (!isCorrect) return 0;
+
+    let base = 100;
+    let bonus = 0;
+
+    if (timeSec <= 10) {
+      bonus = Math.round((10 - timeSec) * 10);
+    }
+
+    return base + bonus;
+  }
+
+  function showPop(text) {
+    scorePop.textContent = text;
+    scorePop.classList.add('show');
+    setTimeout(() => {
+      scorePop.classList.remove('show');
+    }, 900);
+  }
+
+  function loadQuestion() {
+    answered = false;
+    nextBtn.disabled = true;
+
+    const item = QUESTIONS[index];
+    const pct = ((index) / QUESTIONS.length) * 100;
+
+    qCount.textContent =
+      `Question ${index + 1} / ${QUESTIONS.length}`;
+    progressFill.style.width = `${pct}%`;
+    questionText.textContent = item.q;
+
+    answersEl.innerHTML = '';
+
+    item.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+
+      const label = document.createElement('div');
+      label.className = 'answer-label';
+      label.textContent = String.fromCharCode(65 + i);
+
+      const text = document.createElement('div');
+      text.textContent = opt;
+
+      btn.appendChild(label);
+      btn.appendChild(text);
+
+      btn.onclick = () => chooseAnswer(i, btn);
+
+      answersEl.appendChild(btn);
+    });
+
+    startTime = performance.now();
+  }
+
+  function chooseAnswer(choiceIdx, btnEl) {
+    if (answered) return;
+    answered = true;
+
+    const item = QUESTIONS[index];
+    const timeTaken = (performance.now() - startTime) / 1000;
+    const isCorrect = choiceIdx === item.correct;
+    const earned = calcScore(isCorrect, timeTaken);
+
+    totalScore += earned;
+
+    // Mark answers
+    const allBtns = answersEl.querySelectorAll('.answer-btn');
+    allBtns.forEach((b, i) => {
+      if (i === item.correct) b.classList.add('correct');
+      if (i === choiceIdx && !isCorrect) b.classList.add('wrong');
+      if (i === choiceIdx) b.classList.add('selected');
+      b.disabled = true;
+    });
+
+    // Update small score
+    scoreSmall.textContent = `${totalScore} pts`;
+
+    // White +score pop
+    if (isCorrect) {
+      showPop(`Correct! +${earned}`);
+    } else {
+      showPop(`Incorrect!`);
+    }
+
+    // Save history
+    history.push({
+      q: index + 1,
+      correct: isCorrect,
+      time: timeTaken.toFixed(1),
+      pts: earned
+    });
+
+    nextBtn.disabled = false;
+  }
+
+  function nextQuestion() {
+    index++;
+    if (index < QUESTIONS.length) {
+      loadQuestion();
+    } else {
+      showFinal();
+    }
+  }
+
+  function showFinal() {
+    quizScreen.style.display = 'none';
+    finalScreen.style.display = 'block';
+
+    progressFill.style.width = '100%';
+    finalScore.textContent = `${totalScore}`;
+
+    const max = QUESTIONS.length * 200;
+    finalSub.textContent =
+      `FINAL SCORE`;
+
+    breakdown.innerHTML = '';
+    history.forEach(h => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `
+        <span>Q${h.q} • ${h.time}s</span>
+        <b>+${h.pts}</b>
+      `;
+      breakdown.appendChild(row);
+    });
+  }
+
+  function startQuiz() {
+    index = 0;
+    totalScore = 0;
+    history = [];
+
+    startScreen.style.display = 'none';
+    finalScreen.style.display = 'none';
+    quizScreen.style.display = 'block';
+
+    scoreSmall.textContent = '0 pts';
+    loadQuestion();
+  }
+
+  // --- Events ---
+  startBtn.addEventListener('click', startQuiz);
+  restartBtn.addEventListener('click', startQuiz);
+  nextBtn.addEventListener('click', nextQuestion);
+
+  // Allow replacing banner easily:
+  // document.getElementById('banner').src = 'your-logo-16-9.png';
+</script>
+
+</body>
+</html>
