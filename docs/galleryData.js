@@ -40,6 +40,12 @@ const GALLERY_ITEMS = [
     demo: "https://dilitru.github.io/whack_a_mole/whack_a_mole.html"
   },
   {
+    name: "Quiz App",
+    thumb: "thumbs/quiz_app.png",
+    desc: "A simple quiz game with timed-based scoring.",
+    demo: "https://dilitru.github.io/quiz_app/quiz_app.html"
+  },
+  {
     name: "Coming soon",
     thumb: "thumbnail.png",
     desc: "More experiences coming soon!",
