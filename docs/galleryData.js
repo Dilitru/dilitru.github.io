@@ -52,6 +52,12 @@ const GALLERY_ITEMS = [
     demo: "https://dilitru.github.io/prize_roulette/prize_roulette.html"
   },
   {
+    name: "Stamp Rally Passport",
+    thumb: "thumbs/stamp_rally_passport.png",
+    desc: "A simple digital passport for a stamp rally.",
+    demo: "https://dilitru.github.io/stamp_rally_passport/stamp_rally_passport.html"
+  },
+  {
     name: "Coming soon",
     thumb: "thumbnail.png",
     desc: "More experiences coming soon!",
