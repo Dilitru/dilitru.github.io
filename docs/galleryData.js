@@ -46,6 +46,12 @@ const GALLERY_ITEMS = [
     demo: "https://dilitru.github.io/quiz_app/quiz_app.html"
   },
   {
+    name: "Prize Roulette",
+    thumb: "thumbs/prize_roulette.png",
+    desc: "A prize roulette with adjustable amounts of prizes.",
+    demo: "https://dilitru.github.io/prize_roulette/prize_roulette.html"
+  },
+  {
     name: "Coming soon",
     thumb: "thumbnail.png",
     desc: "More experiences coming soon!",
