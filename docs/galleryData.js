@@ -65,7 +65,7 @@ const GALLERY_ITEMS = [
   },
   {
     name: "Lights Out",
-    thumb: "lights_out/lights_out_thumb.png",
+    thumb: "lights_out/lights_out_thumb.jpg",
     desc: "Halloween puzzle game.",
     demo: "https://dilitru.github.io/lights_out/lights_out.html"
   },
