@@ -58,6 +58,12 @@ const GALLERY_ITEMS = [
     demo: "https://dilitru.github.io/stamp_rally_passport/stamp_rally_passport.html"
   },
   {
+    name: "Awards Wall",
+    thumb: "awards_wall/awards_wall_thumb.png",
+    desc: "An awardees wall people can stand in front of, displaying their achievements.",
+    demo: "https://dilitru.github.io/awards_wall/awards_wall.html"
+  },
+  {
     name: "Coming soon",
     thumb: "thumbnail.png",
     desc: "More experiences coming soon!",
