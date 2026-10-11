@@ -64,6 +64,12 @@ const GALLERY_ITEMS = [
     demo: "https://dilitru.github.io/awards_wall/awards_wall.html"
   },
   {
+    name: "Lights Out",
+    thumb: "lights_out/lights_out_thumb.png",
+    desc: "Halloween puzzle game.",
+    demo: "https://dilitru.github.io/lights_out/lights_out.html"
+  },
+  {
     name: "Coming soon",
     thumb: "thumbnail.png",
     desc: "More experiences coming soon!",
