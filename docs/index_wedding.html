@@ -104,7 +104,7 @@ a{color:inherit;text-decoration:none}
   font-family: monospace;
   color: rgba(0, 255, 204, 0.75);
   text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
-  font-size: 0.9rem;
+  font-size: 0.45rem;
   opacity: 0;
   animation: floatUpFormula linear forwards;
 }
@@ -354,6 +354,12 @@ html {
   color:var(--gold);
   font-size: 2rem;
 }
+
+/* about text panel + one-line heading */
+.about-panel{width:100%;max-width:520px;box-sizing:border-box;padding:22px 18px;background:rgba(2,52,44,.7);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:22px}
+#about .about-panel p{margin-left:auto;margin-right:auto}
+#about .flourish-heading{font-size:clamp(1.05rem,4.6vw,2.3rem);white-space:nowrap;gap:.5em}
+#about .flourish-heading::before,#about .flourish-heading::after{font-size:1em}
 </style>
 </head>
 <body>
@@ -389,6 +395,7 @@ html {
   <!-- Your original content wrapped so it sits cleanly above the effect -->
   <div class="about-content">
     <img src="me.jpg" alt="JJ's Photo" class="photo">
+    <div class="about-panel">
     <h2 class="flourish-heading">CREATIVITY + CODING</h2>
     <p>Hi, I'm JJ! 👋</p>
 
@@ -398,6 +405,7 @@ html {
       <br><br>
       Nagsisimula pa lang ako, and I’d love to work with you to add a special touch to the very special day.
     </p>
+    </div>
     <a href="#teaser" class="btn">See the experiences</a>
   </div>
 </section>
@@ -428,7 +436,7 @@ html {
   </div>
 </section>
 
-  <div class="foot">©️ Dilitru 2026<button id="replay">Replay the opening</button></div>
+  <div class="foot">© Dilitru 2026. <button id="replay">Replay the opening</button></div>
 </main>
 
 <main id="galleryPage" hidden>
