@@ -37,7 +37,8 @@ const GALLERY_ITEMS = [
     name: "Whack A Mole",
     thumb: "thumbs/whack_a_mole.png",
     desc: "A classic whack a mole game.",
-    demo: "https://dilitru.github.io/whack_a_mole/whack_a_mole.html"
+    demo: "https://dilitru.github.io/whack_a_mole/whack_a_mole.html",
+	tags: ["wedding"]
   },
   {
     name: "Quiz App",
@@ -49,19 +50,22 @@ const GALLERY_ITEMS = [
     name: "Prize Roulette",
     thumb: "thumbs/prize_roulette.png",
     desc: "A prize roulette with adjustable amounts of prizes.",
-    demo: "https://dilitru.github.io/prize_roulette/prize_roulette.html"
+    demo: "https://dilitru.github.io/prize_roulette/prize_roulette.html",
+	tags: ["best-wedding", "wedding"]
   },
   {
     name: "Stamp Rally Passport",
     thumb: "thumbs/stamp_rally_passport.png",
     desc: "A simple digital passport for a stamp rally.",
-    demo: "https://dilitru.github.io/stamp_rally_passport/stamp_rally_passport.html"
+    demo: "https://dilitru.github.io/stamp_rally_passport/stamp_rally_passport.html",
+	tags: ["best-wedding", "wedding"]
   },
   {
     name: "Awards Wall",
     thumb: "awards_wall/awards_wall_thumb.png",
     desc: "An awardees wall people can stand in front of, displaying their achievements.",
-    demo: "https://dilitru.github.io/awards_wall/awards_wall.html"
+    demo: "https://dilitru.github.io/awards_wall/awards_wall.html",
+	tags: ["best-wedding", "wedding"]
   },
   {
     name: "Lights Out",
