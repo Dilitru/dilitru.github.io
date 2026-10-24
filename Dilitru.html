@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Dilitru</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f2e7;--card:#fffcf6;--text:#2d2926;--muted:#80756b;--gold:#fff1d4;--dark-gold:#946b03;--blush:#efd6cf;--sage:#d9dfcf;--line:#e4d9c6;--teal:#137a78;--bar:60px;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--bar))}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.6 'Jost',system-ui,-apple-system,'Segoe UI',sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-weight:500;line-height:1.1;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--bar);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:var(--bg);border-bottom:1px solid var(--gold)}
+.logo{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.7rem;font-weight:600;letter-spacing:.04em;background:none;border:0;padding:0}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes spin{to{--a:360deg}}
+.pill{position:relative;z-index:0;border:0;color:#fff;border-radius:999px;padding:9px 20px;font-weight:500;background:conic-gradient(from var(--a),#0d5857 0 55%,#5fe3d8 85%,#fff 98%,#0d5857 100%);animation:spin 3s linear infinite}
+.pill::before{content:"";position:absolute;z-index:-1;inset:-3px;border-radius:inherit;background:conic-gradient(from var(--a),transparent 0 55%,rgba(95,227,216,.95) 85%,rgba(255,255,255,.9) 98%,transparent 100%);filter:blur(7px);animation:spin 3s linear infinite}
+.pill::after{content:"";position:absolute;z-index:-1;inset:2px;border-radius:inherit;background:var(--teal)}
+@media (prefers-reduced-motion:reduce){.pill,.pill::before{animation:none}}
+.screen{min-height:calc(100vh - var(--bar) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:calc(100svh - var(--bar) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:48px 26px}
+.btn{border:1px solid var(--gold);background:var(--text);color:var(--bg);border-radius:999px;padding:13px 26px;font-weight:500;margin-top:30px}
+.btn.ghost{background:transparent;color:var(--text)}
+/* intro */
+#intro h1{font-size:clamp(2rem,9vw,4.6rem);max-width:14ch}
+.hello{display:block;font-style:italic;color:var(--gold);margin-bottom:.15em}
+.w{display:inline-block;opacity:0;transform:translateY(12px)}
+.go .w{animation:in .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d)*.13s + .3s)}
+@keyframes in{to{opacity:1;transform:none}}
+#intro p{color:var(--muted);max-width:30ch;margin:22px 0 20;opacity:0}
+.go #intro p{animation:in 1s 1.9s forwards}
+#intro .btn{opacity:0}
+.go #intro .btn{animation:in 1s 2.2s forwards}
+/* intro scene */
+#intro{position:relative;overflow:hidden;align-items:flex-start;justify-content:flex-start;text-align:left;padding:34px 22px}
+.bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%;z-index:0}
+.wash{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(248,242,231,.82),rgba(248,242,231,.35) 60%,rgba(248,242,231,.12))}
+@supports (background:color-mix(in srgb,red,blue)){.wash{background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 82%,transparent),color-mix(in srgb,var(--bg) 35%,transparent) 60%,color-mix(in srgb,var(--bg) 12%,transparent))}}
+.couple{position:absolute;z-index:2;right:-16%;bottom:0;height:54%;width:auto;opacity:0;pointer-events:none}
+.go .couple{animation:cin 1.3s .5s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes cin{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+.txt{position:relative;z-index:4}
+#intro .txt h1{font-size:clamp(2.1rem,9vw,4.4rem);max-width:14ch}
+.petal{position:absolute;inset:0;pointer-events:none}.pb{z-index:1}.pf{z-index:3}
+@media (min-width:820px){#intro{justify-content:center;padding:48px 6vw}.couple{right:0;height:94%}.txt{max-width:46%}#intro .txt h1{font-size:clamp(3rem,5.5vw,5rem)}}
+@media (prefers-reduced-motion:reduce){.go .couple{animation-duration:.01s;animation-delay:0s}}
+#intro .txt h1,#intro .txt p{color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.55)}
+#intro .txt .btn{padding:9px 20px;font-size:.92rem;margin-top:22px;background:var(--teal);color:#fff;border:0}
+#intro .txt .hello{font-size:1.6em}
+/* about */
+#about {
+  position: relative;
+  overflow: hidden; /* Clips floating elements inside #about */
+  background: linear-gradient(to bottom, #034a38 0%, #000000 100%);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Keeps your photo and text above the floating background effect */
+.about-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally */
+  text-align: center;  /* Centers text */
+  width: 100%;
+}
+
+/* Atmosphere layer container */
+.math-atmosphere {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Glowing Teal Particles with White Core */
+.math-particle {
+  position: absolute;
+  bottom: -20px;
+  width: 5px;
+  height: 5px;
+  background: #ffffff; /* White core */
+  box-shadow: 0 0 6px #00ffcc, 0 0 12px #00ffcc; /* Teal glow */
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatUpParticle linear forwards;
+}
+
+/* Floating Math Formulas */
+.math-formula {
+  position: absolute;
+  bottom: -30px;
+  font-family: monospace;
+  color: rgba(0, 255, 204, 0.75);
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+  font-size: 0.9rem;
+  opacity: 0;
+  animation: floatUpFormula linear forwards;
+}
+
+/* Keyframes for rising particles */
+@keyframes floatUpParticle {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8; /* Fade in quickly at the bottom */
+  }
+  85% {
+    opacity: 0.8; /* Stay fully visible nearly all the way up */
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.2); /* Travel the full height */
+    opacity: 0; /* Fade out only at the very top */
+  }
+}
+
+/* Keyframes for scaling + fading math formulas */
+@keyframes floatUpFormula {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+    transform: translateY(-60px) scale(1); /* Scale up as it starts */
+  }
+  85% {
+    opacity: 0.9; /* Stay visible through the majority of the float */
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) scale(1.1); /* Travel the full height */
+  }
+}
+
+
+.photo {
+  width: 112px;
+  height: 112px;
+  border-radius: 18px;
+  border: 1.5px solid var(--gold); /* Switched from dashed to solid for a cleaner framed look */
+  object-fit: cover;               /* Ensures the photo fills the square nicely without distorting */
+  margin-bottom: 26px;
+  background: var(--blush);        /* Acts as a nice backdrop if your image has transparency */
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.2); /* Optional: subtle glow to match your section */
+}
+#about h2{font-size:2.3rem;margin-bottom:14px;color:var(--gold)}
+#about p{max-width:36ch;margin:0;font-size:1.06rem;color:#fcfcfc}
+/* teaser */
+#teaser{background:linear-gradient(160deg,var(--blush),var(--sage));position:relative}
+#teaser .ph{position:absolute;top:18px;left:0;right:0;color:var(--muted);font-size:.8rem}
+#teaser h2{font-size:clamp(2.2rem,8vw,3.6rem);max-width:12ch}
+.foot{padding:22px;text-align:center;color:var(--muted);font-size:.8rem}
+.foot button{background:none;border:0;text-decoration:underline;color:inherit;font-size:inherit}
+
+#teaser {
+  padding: 80px 20px;
+  background: var(white, #0b1311);
+  color: #ffffff;
+}
+
+.teaser-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+}
+
+.teaser-header {
+  text-align: center;
+}
+
+.teaser-header h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  color: var(--gold, #d4af37);
+}
+
+.teaser-header p {
+  color: #a0a0a0;
+  font-size: 0.95rem;
+}
+
+/* Subheadings */
+.teaser-group {
+  width: 100%;
+}
+
+.teaser-subheading {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: var(--dark-gold);
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--dark-gold);
+  padding-bottom: 8px;
+}
+
+/* Forces a strict 3-column horizontal row */
+.teaser-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* Teaser Item Card */
+.teaser-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--dark-gold);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teaser-card:hover {
+  transform: translateY(-4px);
+  border-color: #00ffcc;
+  box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15);
+}
+
+.teaser-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #1a1a1a;
+}
+
+/* Compact padding and small font size for the name */
+.teaser-card-info {
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.teaser-card-info h4 {
+  font-size: 0.85rem; /* Small and clean to fit the screen */
+  font-weight: 500;
+  margin: 0;
+  color: var(--dark-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Keeps long names from wrapping awkwardly */
+}
+
+/* Responsive fallback for smaller mobile screens */
+@media (max-width: 640px) {
+  .teaser-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* Keeps them horizontal even on smaller screens, or change to 1fr if you prefer stacking */
+  }
+}
+
+.teaser-action {
+  margin-top: 10px;
+}
+/* gallery */
+#galleryPage{padding:26px 18px 60px;max-width:620px;margin:0 auto}
+#galleryPage h2{font-size:2.4rem;margin:6px 0 4px}
+.back{background:none;border:0;padding:6px 0;color:var(--muted)}
+.sub{color:var(--muted);margin:0 0 22px}
+.card{display:flex;gap:16px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px}
+.thumb{flex:none;width:84px;height:84px;border-radius:12px;display:grid;place-items:center;font-size:2rem}
+.card h3{font-size:1.4rem}
+.card p{margin:2px 0 0;color:var(--muted);font-size:.95rem;line-height:1.4}
+.soon{font-size:.78rem;color:var(--gold)}
+[hidden]{display:none!important}
+/* sheet */
+.sheet-bg{position:fixed;inset:0;z-index:60;background:rgba(20,15,10,.5);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:22px 22px 0 0;padding:26px 24px calc(26px + env(safe-area-inset-bottom,0px));border-top:2px solid var(--gold);animation:up .35s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet h3{font-size:2rem;margin-bottom:8px}
+.sheet p{margin:0 0 20px}
+.row{display:flex;gap:10px}
+.row .btn{margin:0;flex:1;text-align:center}
+.btn[aria-disabled=true]{opacity:.5;pointer-events:none}
+/* message popover */
+.pop-bg{position:fixed;inset:0;z-index:40}
+.pop{position:fixed;z-index:41;top:calc(env(safe-area-inset-top,0px) + var(--bar) + 6px);right:12px;width:min(310px,calc(100vw - 24px));background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.pop h3{font-size:1.5rem}
+.pop small{color:var(--muted);display:block;margin-bottom:10px}
+.pop a{display:flex;gap:12px;align-items:center;padding:10px 6px;border-top:1px solid var(--line)}
+.num{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:2px;color:var(--muted);font-size:.9rem}
+.num button{border:1px solid var(--line);background:none;border-radius:999px;padding:4px 14px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;background:var(--text);color:var(--bg);padding:10px 20px;border-radius:999px;font-size:.9rem}
+.num{gap:10px}.num span{min-width:0;overflow-wrap:anywhere}.num button{flex:none}
+/* gate */
+.gate{position:fixed;inset:0;z-index:100;perspective:1400px;overflow:hidden;cursor:pointer}
+.door{position:absolute;top:0;bottom:0;width:50%;background:linear-gradient(180deg,var(--card),var(--blush));transition:transform 1.5s cubic-bezier(.65,0,.25,1)}
+.door.l{left:0;transform-origin:left center;border-right:1px solid var(--gold);box-shadow:inset -14px 0 30px rgba(176,138,71,.18)}
+.door.r{right:0;transform-origin:right center;border-left:1px solid var(--gold);box-shadow:inset 14px 0 30px rgba(176,138,71,.18)}
+.door::after{content:"";position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.l::after{right:18px}.r::after{left:18px}
+.gate .msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;z-index:2;transition:opacity .5s;padding:0 40px}
+.gate .msg h2{font-size:clamp(2rem,8vw,3.2rem)}
+.gate .msg span{color:var(--muted);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.gate.open .l{transform:rotateY(-108deg)}
+.gate.open .r{transform:rotateY(108deg)}
+.gate.open .msg{opacity:0}
+@media (prefers-reduced-motion:reduce){.door{transition-duration:.01s}.go .w,.go #intro p,.go #intro .btn{animation-duration:.01s;animation-delay:0s}}
+/*Added for smooth scrolling*/
+html {
+  scroll-behavior: smooth;
+}
+/*Style the see gallery button*/
+/* Style specifically for the "gallery" skip button */
+#intro .txt .btn[data-go="gallery"] {
+  background: #6c757d;       /* Overwrites background to grey */
+  color: #fff;               /* Keeps text white for contrast */
+  padding: 6px 14px;         /* Smaller padding */
+  font-size: 0.6rem;         /* Smaller text size */
+  margin-top: 15px;          /* Adjusted spacing if needed */
+  border: 0;                 /* Keeps the borderless style */
+}
+
+/*Flourish*/
+.flourish-heading {
+  font-family: serif; /* Gives it an elegant, classic feel */
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #fff;
+}
+
+/* Add left and right foliates using stylized Unicode flourishes */
+.flourish-heading::before {
+  content: "☙"; /* Or try symbols like ❦, ⚜, ༺, 🙔 */
+  color:var(--gold);
+  font-size: 2rem;
+}
+
+.flourish-heading::after {
+  content: "❧";
+  color:var(--gold);
+  font-size: 2rem;
+}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate" role="button" tabindex="0" aria-label="Open">
+  <div class="door l"></div><div class="door r"></div>
+  <div class="msg"><h2>You’re invited to something.</h2><span>Tap to open</span></div>
+</div>
+
+<header class="bar">
+  <button class="logo" id="logo" aria-label="Dilitru home">Dilitru</button>
+  <button class="pill" id="msgBtn" aria-haspopup="true" aria-expanded="false">Message me</button>
+</header>
+
+<main id="home">
+  <section class="screen" id="intro">
+    <img class="bgimg" alt="" src="background.jpg">
+    <div class="wash"></div>
+    <img class="couple" alt="A smiling couple in wedding attire" src="couple.png">
+    <div class="txt">
+      <h1 id="hl" aria-label="Hello! I can help add that extra magic to weddings."></h1>
+      <p>Interactive experiences for your couples and their guests.</p>
+      <a href="#about" class="btn">Discover more</a><br>
+      <button class="btn" data-go="gallery">Skip to gallery</button>
+    </div>
+  </section>
+
+  <!-- New about section-->
+  <section class="screen" id="about">
+  <!-- Atmosphere layer for glowing particles and formulas -->
+  <div class="math-atmosphere"></div>
+
+  <!-- Your original content wrapped so it sits cleanly above the effect -->
+  <div class="about-content">
+    <img src="me.jpg" alt="JJ's Photo" class="photo">
+    <h2 class="flourish-heading">CREATIVITY + CODING</h2>
+    <p>Hi, I'm JJ! 👋</p>
+
+    <p>Every wedding has its own story, and I want to add moments that make them extra special.
+      <br><br>
+      By creativity + coding, I create digital experiences to give couples and their guests to connect and make memories. 🥰 
+      <br><br>
+      Nagsisimula pa lang ako, and I’d love to work with you to add a special touch to the very special day.
+    </p>
+    <a href="#teaser" class="btn">See the experiences</a>
+  </div>
+</section>
+
+  <section class="screen" id="teaser">
+  <div class="teaser-container">
+
+
+    <!-- Group 1: Our Best Works (Top 3) -->
+    <div class="teaser-group">
+      <h3 class="teaser-subheading">Our Best Works</h3>
+      <div class="teaser-grid grid-3" id="best-works-grid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Group 2: Newest Experiences (Last 5) -->
+    <div class="teaser-group">
+      <h3 class="teaser-subheading">Newest Experiences</h3>
+      <div class="teaser-grid grid-5" id="newest-works-grid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <div class="teaser-action">
+      <a class="btn" href="https://dilitru.github.io/" style="display:inline-block">Enter the full gallery</a>
+    </div>
+  </div>
+</section>
+
+  <div class="foot">Mockup only. <button id="replay">Replay the opening</button></div>
+</main>
+
+<main id="galleryPage" hidden>
+  <button class="back" data-go="home">Back</button>
+  <h2>Gallery</h2>
+  <p class="sub">Tap one to see what it does.</p>
+  <div id="list"></div>
+</main>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true">
+    <h3 id="sTitle"></h3>
+    <p id="sText"></p>
+    <div class="row">
+      <a class="btn" id="sDemo" target="_blank" rel="noopener">View demo</a>
+      <button class="btn ghost" id="sShare">Share</button>
+    </div>
+  </div>
+</div>
+
+<div class="pop-bg" id="popBg" hidden></div>
+<div class="pop" id="pop" hidden>
+
+  <div id="rows"></div>
+  <div class="num"><span id="numTxt"></span><button id="copy">Copy</button></div>
+  <div class="num"><span id="mailTxt"></span><button id="copyMail">Copy</button></div>
+</div>
+
+<!-- 1. Load data first -->
+<script src="galleryData.js"></script>
+
+<script>
+  
+/* ===== Settings: edit these ===== */
+var CONFIG={
+  phoneIntl:'639166149218',      /* number for WhatsApp / Viber, no + or spaces */
+  phoneShown:'0916 614 9218',
+  messenger:'',    /* the part after m.me/ ; the Messenger row stays hidden until this is filled */
+  email:'josericardojuliano@gmail.com',
+  waText:'Hi! I saw your Dilitru page and I’m interested in the interactive experiences.',
+  emailSubject:'Question about Dilitru',
+  shareText:'Take a look at this interactive wedding experience from Dilitru.',
+  gateHours:24
+};
+var ITEMS=[
+ {id:'invite',e:'💌',c:'#efd6cf',t:'Animated Invite + RSVP',l:'Guests open the doors, then reply right inside.',d:'Every guest gets their own invite with their name on it. They RSVP in the invite, including a second guest and dietary needs. You and the couple get a live guest list in Google Sheets.',demo:'https://claude.ai/artifact/SowqsZ648r2qqbiUcDwZ2M'},
+ {id:'wall',e:'🕊️',c:'#d9dfcf',t:'Dedication Wall',l:'A wall of messages for the couple.',d:'Guests leave their wishes on the wall during the celebration. The couple can keep the whole wall afterwards.'},
+ {id:'trivia',e:'❔',c:'#f3e4c3',t:'Guest Trivia',l:'How well do guests know the couple?',d:'A quick quiz on everyone’s phones, with a live scoreboard.',ph:1},
+ {id:'photos',e:'📸',c:'#e3d6e6',t:'Live Photo Wall',l:'Guest photos, on the big screen.',d:'Photos appear on the venue screen as guests share them.',ph:1},
+ {id:'seats',e:'🪑',c:'#d6e2e6',t:'Seat Finder',l:'Find your table.',d:'Guests type their name and see where they’re sitting.',ph:1}
+];
+var $=function(i){return document.getElementById(i)};
+var base=location.href.split('#')[0];
+
+/* intro text */
+(function(){
+  var h=$('hl');
+  var hi=document.createElement('span');hi.className='hello';
+  var parts=[['Hello!',0]];
+  parts.forEach(function(p){var s=document.createElement('span');s.className='w';s.style.setProperty('--d',0);s.textContent=p[0];hi.appendChild(s)});
+  h.appendChild(hi);
+  'I can help add that extra magic to weddings.'.split(' ').forEach(function(w,i){
+    var s=document.createElement('span');s.className='w';s.style.setProperty('--d',i+3);s.textContent=w;h.appendChild(s);h.appendChild(document.createTextNode(' '));
+  });
+})();
+
+/* gallery list */
+ITEMS.forEach(function(it){
+  var b=document.createElement('button');b.className='card';
+  b.innerHTML='<span class="thumb" style="background:'+it.c+'">'+it.e+'</span><span><h3>'+it.t+'</h3><p>'+it.l+'</p>'+(it.ph?'<span class="soon">Placeholder</span>':'')+'</span>';
+  b.onclick=function(){openSheet(it)};
+  $('list').appendChild(b);
+});
+
+/* gold petals */
+(function(){
+  var sec=$('intro');
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  var cv=[],cx=[],W=0,H=0,D=1,P=[],run=false,inView=false,last=0;
+  ['pb','pf'].forEach(function(c){var k=document.createElement('canvas');k.className='petal '+c;sec.appendChild(k);cv.push(k);cx.push(k.getContext('2d'))});
+  var cols=['#d8b25a','#e9d08c','#c89b40','#f2e1a8','#efcdc3'];
+  function size(){D=Math.min(window.devicePixelRatio||1,2);W=sec.clientWidth;H=sec.clientHeight;cv.forEach(function(k){k.width=W*D;k.height=H*D})}
+  function mk(init){var o=6+Math.random()*10,s=o/10;return{x:Math.random()*W,y:init?Math.random()*H:-20,s:s,v:(.35+Math.random()*.6+o/40)*.25,a:6+Math.random()*18,p:Math.random()*6.28,f:.6+Math.random()*1.2,r:Math.random()*6.28,rs:(Math.random()-.5)*1.4,t:Math.random()*6.28,c:cols[Math.random()*cols.length|0],L:o>11?1:0}}
+  size();for(var i=0;i<(window.innerWidth<600?22:34);i++)P.push(mk(1));
+  function draw(c,p){c.save();c.globalAlpha=.9;c.translate(p.x+Math.sin(p.p)*p.a,p.y);c.rotate(p.r);c.scale(3,Math.abs(Math.cos(p.t))*3+.2);c.fillStyle=p.c;c.beginPath();c.moveTo(0,-p.s);c.bezierCurveTo(p.s*.9,-p.s*.5,p.s*.7,p.s*.7,0,p.s);c.bezierCurveTo(-p.s*.7,p.s*.7,-p.s*.9,-p.s*.5,0,-p.s);c.fill();c.restore()}
+  function tick(ts){
+    if(!run)return;
+    var dt=Math.min((ts-last)/16.7||1,3);last=ts;
+    cx.forEach(function(c){c.setTransform(D,0,0,D,0,0);c.clearRect(0,0,W,H)});
+    P.forEach(function(p){p.y+=p.v*dt;p.p+=p.f*.01*dt;p.r+=p.rs*.01*dt;p.t+=p.f*.015*dt;if(p.y>H+20)Object.assign(p,mk(0));draw(cx[p.L],p)});
+    requestAnimationFrame(tick);
+  }
+  function update(){
+    var v=inView&&!document.hidden;
+    if(v&&!run){size();P.forEach(function(p){p.x=Math.random()*W;p.y=Math.random()*H});run=true;last=performance.now();requestAnimationFrame(tick)}
+    if(!v)run=false;
+  }
+  new IntersectionObserver(function(e){inView=e[0].isIntersecting;update()}).observe(sec);
+  document.addEventListener('visibilitychange',update);
+  window.addEventListener('resize',function(){if(run)size()});
+})();
+
+/* views */
+function view(v){
+  $('home').hidden=v!=='home';$('galleryPage').hidden=v!=='gallery';
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){view(b.dataset.go)}});
+$('logo').onclick=function(){view('home')};
+
+/* sheet + share */
+var cur=null;
+function openSheet(it){
+  cur=it;$('sTitle').textContent=it.t;$('sText').textContent=it.d;
+  var a=$('sDemo');
+  if(it.demo){a.href=it.demo;a.textContent='View demo';a.removeAttribute('aria-disabled')}
+  else{a.removeAttribute('href');a.textContent='Demo coming soon';a.setAttribute('aria-disabled','true')}
+  $('sheetBg').hidden=false;
+}
+$('sheetBg').onclick=function(e){if(e.target===this)this.hidden=true};
+$('sShare').onclick=async function(){
+  var url=base+'#'+cur.id;
+  var data={title:'Dilitru: '+cur.t,text:CONFIG.shareText,url:url};
+  try{if(navigator.share){await navigator.share(data);return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(url);toast('Link copied')}catch(e){toast(url)}
+};
+function toast(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
+
+/* message popover */
+var rows=[
+ ['💬','Messenger','https://m.me/'+CONFIG.messenger],
+ ['🟢','WhatsApp','https://wa.me/'+CONFIG.phoneIntl+'?text='+encodeURIComponent(CONFIG.waText)],
+ ['🟣','Viber','viber://chat?number=%2B'+CONFIG.phoneIntl],
+ ['📞','Call','tel:+'+CONFIG.phoneIntl],
+ ['✉️','Email','mailto:'+CONFIG.email+'?subject='+encodeURIComponent(CONFIG.emailSubject)]
+];
+rows.filter(function(r){return r[1]!=='Messenger'||CONFIG.messenger}).forEach(function(r){var a=document.createElement('a');a.href=r[2];a.innerHTML='<span>'+r[0]+'</span>'+r[1];$('rows').appendChild(a)});
+$('numTxt').textContent=CONFIG.phoneShown;
+$('mailTxt').textContent=CONFIG.email;
+function pop(on){$('pop').hidden=!on;$('popBg').hidden=!on;$('msgBtn').setAttribute('aria-expanded',on)}
+$('msgBtn').onclick=function(){pop($('pop').hidden)};
+$('popBg').onclick=function(){pop(false)};
+$('copy').onclick=async function(){try{await navigator.clipboard.writeText(CONFIG.phoneShown);toast('Number copied')}catch(e){toast(CONFIG.phoneShown)}};
+$('copyMail').onclick=async function(){try{await navigator.clipboard.writeText(CONFIG.email);toast('Email copied')}catch(e){toast(CONFIG.email)}};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){pop(false);$('sheetBg').hidden=true}});
+
+/* gate with 24 hr cooldown */
+var KEY='dilitru_gate',g=$('gate');
+function seen(){try{var t=+localStorage.getItem(KEY);return t&&Date.now()-t<CONFIG.gateHours*36e5}catch(e){return false}}
+function mark(){try{localStorage.setItem(KEY,Date.now())}catch(e){}}
+function openGate(){
+  if(g.classList.contains('open'))return;
+  g.classList.add('open');mark();
+  document.body.classList.add('go');
+  setTimeout(function(){g.hidden=true},1600);
+}
+g.onclick=openGate;
+g.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openGate()}};
+$('replay').onclick=function(){
+  document.body.classList.remove('go');view('home');
+  g.hidden=false;g.classList.remove('open');
+};
+
+/* start: shared links skip the gate */
+var h=location.hash.slice(1),hit=ITEMS.filter(function(i){return i.id===h})[0];
+if(hit||h==='gallery'){g.hidden=true;document.body.classList.add('go');view('gallery');if(hit)openSheet(hit)}
+else if(seen()){g.hidden=true;document.body.classList.add('go')}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector("#about .math-atmosphere");
+  if (!container) return;
+
+  const mathSymbols = [
+    "startFun()", "∑", "∫", "π", "f(x)", "createExperience(awesome)", "epicStory" , "paiyakinAudience<>",
+    "√x", "Δ", "θ", "engageGuests", "enjoy(makeMemories)", "φ", "unforgettableMoments", "Insta-Worthy"
+  ];
+
+  function spawnEffect() {
+    // 70% particles, 30% math formulas
+    const isFormula = Math.random() < 0.3;
+    const el = document.createElement("div");
+
+    el.style.left = `${Math.random() * 100}%`;
+
+    if (isFormula) {
+      el.className = "math-formula";
+      el.textContent = mathSymbols[Math.floor(Math.random() * mathSymbols.length)];
+      el.style.animationDuration = `${6 + Math.random() * 4}s`; // 6-10s drift
+    } else {
+      el.className = "math-particle";
+      el.style.animationDuration = `${4 + Math.random() * 3}s`; // 4-7s drift
+    }
+
+    container.appendChild(el);
+
+    // Auto-remove element after animation ends
+    setTimeout(() => {
+      el.remove();
+    }, 10000);
+  }
+
+  // Spawns an element every 400ms
+  setInterval(spawnEffect, 200);
+});
+
+//Gallery teaser rendering
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof GALLERY_ITEMS === "undefined") return;
+
+// Helper function to build card HTML (Thumbnail + Compact Name only)
+  function createCardHTML(item) {
+    return `
+      <a href="${item.demo}" class="teaser-card">
+        <img src="${item.thumb}" alt="${item.name}" loading="lazy">
+        <div class="teaser-card-info">
+          <h4>${item.name}</h4>
+        </div>
+      </a>
+    `;
+  }
+
+  // 1. Best Works: Top 3 tagged with "best-wedding"
+  const bestGrid = document.getElementById("best-works-grid");
+  if (bestGrid) {
+    const bestItems = GALLERY_ITEMS
+      .filter(item => item.tags && item.tags.includes("best-wedding"))
+      .slice(0, 3);
+    bestGrid.innerHTML = bestItems.map(createCardHTML).join("");
+  }
+
+  // 2. Newest Experiences: Last 3 tagged with "wedding"
+  const newestGrid = document.getElementById("newest-works-grid");
+  if (newestGrid) {
+    const weddingItems = GALLERY_ITEMS
+      .filter(item => item.tags && item.tags.includes("wedding"));
+    
+    // Grab the last 3 items
+    const newestItems = weddingItems.slice(-3);
+    newestGrid.innerHTML = newestItems.map(createCardHTML).join("");
+  }
+});
+
+</script>
+</body>
+</html>
