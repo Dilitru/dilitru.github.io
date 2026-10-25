@@ -321,7 +321,7 @@ html {
 }
 /*Style the see gallery button*/
 /* Style specifically for the "gallery" skip button */
-#intro .txt .btn[data-go="gallery"] {
+#intro .txt .btn.skip-gallery {
   background: #6c757d;       /* Overwrites background to grey */
   color: #fff;               /* Keeps text white for contrast */
   padding: 6px 14px;         /* Smaller padding */
@@ -382,8 +382,8 @@ html {
     <div class="txt">
       <h1 id="hl" aria-label="Hello! I can help add that extra magic to weddings."></h1>
       <p>Interactive experiences for your couples and their guests.</p>
-      <a href="#about" class="btn">Discover more</a><br><br>
-      <a href="https://dilitru.github.io" class="btn" data-go="gallery">Skip to gallery</a>
+      <a href="#about" class="btn">Discover more</a><br>
+      <a class="btn skip-gallery" href="https://dilitru.github.io/gallery_wedding.html" style="display:inline-block">Skip to gallery</a>
     </div>
   </section>
 
@@ -431,7 +431,7 @@ html {
     </div>
 
     <div class="teaser-action">
-      <a class="btn" href="https://dilitru.github.io/" style="display:inline-block">Enter the full gallery</a>
+      <a class="btn" href="https://dilitru.github.io/gallery_wedding.html" style="display:inline-block">Enter the full gallery</a>
     </div>
   </div>
 </section>
