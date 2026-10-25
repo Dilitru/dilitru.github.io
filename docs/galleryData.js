@@ -37,8 +37,7 @@ const GALLERY_ITEMS = [
     name: "Whack A Mole",
     thumb: "thumbs/whack_a_mole.png",
     desc: "A classic whack a mole game.",
-    demo: "https://dilitru.github.io/whack_a_mole/whack_a_mole.html",
-	tags: ["wedding"]
+    demo: "https://dilitru.github.io/whack_a_mole/whack_a_mole.html"
   },
   {
     name: "Quiz App",
@@ -50,28 +49,61 @@ const GALLERY_ITEMS = [
     name: "Prize Roulette",
     thumb: "thumbs/prize_roulette.png",
     desc: "A prize roulette with adjustable amounts of prizes.",
-    demo: "https://dilitru.github.io/prize_roulette/prize_roulette.html",
-	tags: ["best-wedding", "wedding"]
+    demo: "https://dilitru.github.io/prize_roulette/prize_roulette.html"
   },
   {
     name: "Stamp Rally Passport",
     thumb: "thumbs/stamp_rally_passport.png",
     desc: "A simple digital passport for a stamp rally.",
-    demo: "https://dilitru.github.io/stamp_rally_passport/stamp_rally_passport.html",
-	tags: ["best-wedding", "wedding"]
+    demo: "https://dilitru.github.io/stamp_rally_passport/stamp_rally_passport.html"
   },
   {
     name: "Awards Wall",
     thumb: "awards_wall/awards_wall_thumb.png",
     desc: "An awardees wall people can stand in front of, displaying their achievements.",
     demo: "https://dilitru.github.io/awards_wall/awards_wall.html",
-	tags: ["best-wedding", "wedding"]
+    tags: ["wedding"]
   },
   {
     name: "Lights Out",
     thumb: "lights_out/lights_out_thumb.jpg",
     desc: "Halloween puzzle game.",
     demo: "https://dilitru.github.io/lights_out/lights_out.html"
+  },
+  {
+    name: "Wedding Human Bingo",
+    thumb: "wedding_human_bingo/wedding_human_bingo_thumb.png",
+    desc: "Find guests who match the quirky prompts. First to complete a row shouts bingo!",
+    demo: "https://dilitru.github.io/wedding_human_bingo/wedding_human_bingo.html",
+    tags: ["wedding"]
+  },
+  {
+    name: "Wedding Photo Hunt",
+    thumb: "wedding_photo_hunt/wedding_photo_hunt_thumb.png",
+    desc: "Race to capture moments from the photo checklist. A fun way to get guests mingling.",
+    demo: "https://dilitru.github.io/wedding_photo_hunt/wedding_photo_hunt.html",
+    tags: ["wedding"]
+  },
+  {
+    name: "Wedding Chair Finder",
+    thumb: "wedding_chair_finder/wedding_chair_finder_thumb.png",
+    desc: "Guests type their name to instantly find their table. No more crowding the seating chart.",
+    demo: "https://dilitru.github.io/wedding_chair_finder/wedding_chair_finder.html",
+    tags: ["wedding", "best-wedding"]
+  },
+  {
+    name: "Wedding Photoframes",
+    thumb: "wedding_photoframes/wedding_photoframes_thumb.png",
+    desc: "Selfie booth with elegant Greek wedding frames. Save to phone or send to print queue.",
+    demo: "https://dilitru.github.io/wedding_photoframes/wedding_photoframes.html",
+    tags: ["wedding", "best-wedding"]
+  },
+  {
+    name: "Wedding Evite",
+    thumb: "wedding_evite/wedding_evite_thumb.png",
+    desc: "A beautiful digital invite with RSVP and details. Shareable link for your guests.",
+    demo: "https://dilitru.github.io/wedding_evite/wedding_evite.html",
+    tags: ["wedding", "best-wedding"]
   },
   {
     name: "Coming soon",
