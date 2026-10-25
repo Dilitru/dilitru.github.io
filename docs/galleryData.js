@@ -71,32 +71,18 @@ const GALLERY_ITEMS = [
     demo: "https://dilitru.github.io/lights_out/lights_out.html"
   },
   {
-    name: "Wedding Human Bingo",
-    thumb: "wedding_human_bingo/wedding_human_bingo_thumb.png",
-    desc: "Find guests who match the quirky prompts. First to complete a row shouts bingo!",
-    demo: "https://dilitru.github.io/wedding_human_bingo/wedding_human_bingo.html",
-    tags: ["wedding", "best-wedding"]
-  },
-  {
-    name: "Wedding Photo Hunt",
+    name: "Photo Hunt",
     thumb: "wedding_photo_hunt/wedding_photo_hunt_thumb.png",
     desc: "Race to capture moments from the photo checklist. A fun way to get guests mingling.",
     demo: "https://dilitru.github.io/wedding_photo_hunt/wedding_photo_hunt.html",
     tags: ["wedding"]
   },
   {
-    name: "Wedding Chair Finder",
+    name: "Chair Finder",
     thumb: "wedding_chair_finder/wedding_chair_finder_thumb.png",
     desc: "Guests type their name to instantly find their table. No more crowding the seating chart.",
     demo: "https://dilitru.github.io/wedding_chair_finder/wedding_chair_finder.html",
     tags: ["wedding", "best-wedding"]
-  },
-  {
-    name: "Wedding Photoframes",
-    thumb: "wedding_photoframes/wedding_photoframes_thumb.png",
-    desc: "Selfie booth with elegant Greek wedding frames. Save to phone or send to print queue.",
-    demo: "https://dilitru.github.io/wedding_photoframes/wedding_photoframes.html",
-    tags: ["wedding"]
   },
   {
     name: "Wedding Evite",
@@ -106,9 +92,37 @@ const GALLERY_ITEMS = [
     tags: ["wedding", "best-wedding"]
   },
   {
+    name: "Dedication Wall",
+    thumb: "wedding_dedication_wall/wedding_dedication_wall_thumb.png",
+    desc: "Guests leave heartfelt messages and wishes. Live wall display for the couple to see.",
+    demo: "https://dilitru.github.io/wedding_dedication_wall/wedding_dedication_wall.html",
+    tags: ["wedding", "best-wedding"]
+  },
+  {
+    name: "Wedding Table Quiz",
+    thumb: "wedding_table_quiz/wedding_table_quiz_thumb.png",
+    desc: "How well do you know the couple? Tables compete for the highest score.",
+    demo: "https://dilitru.github.io/wedding_table_quiz/wedding_table_quiz.html",
+    tags: ["wedding"]
+  },
+  {
+    name: "Selfie Photoframes",
+    thumb: "wedding_photoframes/wedding_photoframes_thumb.png",
+    desc: "Selfie booth with elegant Greek wedding frames. Save to phone or send to print queue.",
+    demo: "https://dilitru.github.io/wedding_photoframes/wedding_photoframes.html",
+    tags: ["wedding",]
+  },
+  {
+    name: "Human Bingo",
+    thumb: "wedding_human_bingo/wedding_human_bingo_thumb.png",
+    desc: "Find guests who match the quirky prompts. First to complete a row shouts bingo!",
+    demo: "https://dilitru.github.io/wedding_human_bingo/wedding_human_bingo.html",
+    tags: ["wedding"]
+  },
+  {
     name: "Coming soon",
     thumb: "thumbnail.png",
     desc: "More experiences coming soon!",
-    demo: "htttps://dilitru.github.io/"
+    demo: "https://dilitru.github.io/"
   }
 ];
