@@ -75,7 +75,7 @@ const GALLERY_ITEMS = [
     thumb: "wedding_human_bingo/wedding_human_bingo_thumb.png",
     desc: "Find guests who match the quirky prompts. First to complete a row shouts bingo!",
     demo: "https://dilitru.github.io/wedding_human_bingo/wedding_human_bingo.html",
-    tags: ["wedding"]
+    tags: ["wedding", "best-wedding"]
   },
   {
     name: "Wedding Photo Hunt",
@@ -96,7 +96,7 @@ const GALLERY_ITEMS = [
     thumb: "wedding_photoframes/wedding_photoframes_thumb.png",
     desc: "Selfie booth with elegant Greek wedding frames. Save to phone or send to print queue.",
     demo: "https://dilitru.github.io/wedding_photoframes/wedding_photoframes.html",
-    tags: ["wedding", "best-wedding"]
+    tags: ["wedding"]
   },
   {
     name: "Wedding Evite",
